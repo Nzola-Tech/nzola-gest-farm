@@ -1,6 +1,6 @@
 {
   "$schema": "../node_modules/@tauri-apps/cli/config.schema.json",
-  "productName": "vite-template",
+  "productName": "Nzola Gest Farmácia",
   "version": "0.1.0",
   "identifier": "com.tauri.dev",
   "build": {
@@ -12,13 +12,16 @@
   "app": {
     "windows": [
       {
-        "title": "vite-template",
-        "width": 800,
+        "title": "Nzola Gest Farmácia",
+        "width": 1000,
         "height": 600,
+        "center": true,
+        "decorations": true,
         "resizable": true,
         "fullscreen": false
       }
     ],
+
     "security": {
       "csp": null
     }

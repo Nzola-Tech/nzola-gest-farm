@@ -1,9 +1,11 @@
 import DefaultLayout from "@/layouts/default";
 
-export default function IndexPage() {
+export default function Home() {
   return (
-    <DefaultLayout>
-      <h1 className="text-4xl font-bold text-center mt-8">Seja bem vindo ao Nzola Gest Farmácia</h1>
+  <>  
+    <DefaultLayout> 
+      <h1 className='dark:text-white text-4xl text-center font-bold'>Home</h1>
     </DefaultLayout>
+  </>
   );
 }

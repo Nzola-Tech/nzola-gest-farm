@@ -5,25 +5,35 @@ export const siteConfig = {
   description: "Gerenciamento de farmácias de maneira eficiente e prática.",
   navItems: [
     {
-      label: "Home",
+      label: "HOME",
       href: "/",
+      content: ['Dados da Empresa', 'Minha Agenda', 'Alterar Minha Senha']
     },
     {
-      label: "Docs",
-      href: "/docs",
+      label: "COMERCIAL",
+      href: "/comercial",
+      content: ['Configuração Jabakule (SMS)']
     },
     {
-      label: "Pricing",
-      href: "/pricing",
+      label: "ARMAZEM",
+      href: "/armazem",
+      content: ['Cópia de Segurança', 'Importação de Dados Via Saft']
     },
     {
-      label: "Blog",
-      href: "/blog",
+      label: "TESOURARIA",
+      href: "/tesouraria",
+      content: ['Utilizadores', 'Perfil de Utilizadores']
     },
     {
-      label: "About",
-      href: "/about",
+      label: "CONTABILIDADE",
+      href: "/contabilidade",
+      content: ['QUIANNI Suporte (QS)', 'Denuncie']
     },
+    {
+      label: "UTILITÁRIOS E CONFIGURAÇÕES",
+      href: "/utilitarios",
+      content: ['Gestão de Idiomas', 'Ajuda', 'Configurações']
+    }
   ],
   navMenuItems: [
     {

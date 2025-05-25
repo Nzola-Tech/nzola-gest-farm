@@ -10,28 +10,33 @@ export const siteConfig = {
       content: ['Dados da Empresa', 'Minha Agenda', 'Alterar Minha Senha']
     },
     {
-      label: "COMERCIAL",
-      href: "/comercial",
+      label: "CLIENTES",
+      href: "/clientes",
       content: ['Configuração Jabakule (SMS)']
     },
     {
-      label: "ARMAZEM",
-      href: "/armazem",
+      label: "PRODUTOS",
+      href: "/produtos",
       content: ['Cópia de Segurança', 'Importação de Dados Via Saft']
     },
     {
-      label: "TESOURARIA",
-      href: "/tesouraria",
+      label: "ESTOQUE",
+      href: "/estoque",
       content: ['Utilizadores', 'Perfil de Utilizadores']
     },
     {
-      label: "CONTABILIDADE",
-      href: "/contabilidade",
+      label: "VENDAS & PDV",
+      href: "/venda-pdv",
       content: ['QUIANNI Suporte (QS)', 'Denuncie']
     },
     {
-      label: "UTILITÁRIOS E CONFIGURAÇÕES",
-      href: "/utilitarios",
+      label: "FINANÇAS",
+      href: "/financas",
+      content: ['Gestão de Idiomas', 'Ajuda', 'Configurações']
+    },
+    {
+      label: "BACKUP & SEGURANÇA",
+      href: "/backup-seguranca",
       content: ['Gestão de Idiomas', 'Ajuda', 'Configurações']
     }
   ],

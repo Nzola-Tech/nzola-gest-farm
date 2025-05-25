@@ -1,5 +1,4 @@
 import Ribbon from "@/components/Ribbon";
-import Ribbon2 from "@/components/Ribbon2";
 import { Link } from "@heroui/link";
 
 export default function DefaultLayout({
@@ -10,7 +9,7 @@ export default function DefaultLayout({
   return (
     <>
       {/* <Ribbon /> */}
-      <Ribbon2 />
+      <Ribbon />
       <div className="relative flex flex-col h-screen">
         <main className="container mx-auto max-w-7xl px-6 flex-grow pt-16">
           {children}

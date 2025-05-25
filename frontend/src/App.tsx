@@ -1,11 +1,12 @@
 import { Route, Routes, useHref, useNavigate } from "react-router-dom";
 
 import Home from "@/pages/index";
-import Comercial from "./pages/comercial";
-import Armazem from "./pages/armazem";
-import Tesouraria from "./pages/tesouraria";
-import Contabilidade from "./pages/contabilidade";
-import Utilitarios from "./pages/utilitarios";
+import Produtos from "./pages/produtos";
+import Clientes from "./pages/clientes";
+import Estoque from "./pages/estoque";
+import VendasPdv from "./pages/vendas-pdv";
+import Financas from "./pages/financas";
+import BeckupSeguranca from "./pages/backup-seguranca";
 import { HeroUIProvider } from "@heroui/system";
 
 
@@ -15,11 +16,12 @@ function App() {
     <HeroUIProvider navigate={navegate} useHref={useHref} >
       <Routes>
       <Route element={<Home />} path="/" />
-      <Route element={<Comercial />} path="/comercial" />
-      <Route element={<Armazem />} path="/armazem" />
-      <Route element={<Tesouraria />} path="/tesouraria" />
-      <Route element={<Contabilidade />} path="/contabilidade" />
-      <Route element={<Utilitarios />} path="/utilitarios" />
+      <Route element={<Produtos />} path="/produtos" />
+      <Route element={<Clientes />} path="/clientes" />
+      <Route element={<Estoque />} path="/estoque" />
+      <Route element={<VendasPdv />} path="/venda-pdv" />
+      <Route element={<Financas />} path="/financas" />
+      <Route element={<BeckupSeguranca />} path="/backup-seguranca" />
     </Routes>
     </HeroUIProvider> 
   );

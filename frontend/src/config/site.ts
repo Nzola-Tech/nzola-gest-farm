@@ -10,14 +10,20 @@ export const siteConfig = {
       content: ['Dados da Empresa', 'Minha Agenda', 'Alterar Minha Senha']
     },
     {
-      label: "CLIENTES",
-      href: "/clientes",
-      content: ['Configuração Jabakule (SMS)']
+      label: "VENDAS & PDV",
+      href: "/venda-pdv",
+      content: ['QUIANNI Suporte (QS)', 'Denuncie']
     },
     {
       label: "PRODUTOS",
       href: "/produtos",
-      content: ['Cópia de Segurança', 'Importação de Dados Via Saft']
+      content: ['Criar Produto'],
+      function: {
+        addProd: "addProduct",
+        rmProd: "rmProduct",
+        del: "delProduct",
+        edit:"editProduct"
+      }
     },
     {
       label: "ESTOQUE",
@@ -25,14 +31,14 @@ export const siteConfig = {
       content: ['Utilizadores', 'Perfil de Utilizadores']
     },
     {
-      label: "VENDAS & PDV",
-      href: "/venda-pdv",
-      content: ['QUIANNI Suporte (QS)', 'Denuncie']
-    },
-    {
       label: "FINANÇAS",
       href: "/financas",
       content: ['Gestão de Idiomas', 'Ajuda', 'Configurações']
+    },
+    {
+      label: "CLIENTES",
+      href: "/clientes",
+      content: ['Configuração Jabakule (SMS)']
     },
     {
       label: "BACKUP & SEGURANÇA",

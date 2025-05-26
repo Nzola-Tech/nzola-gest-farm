@@ -1,4 +1,4 @@
-import Ribbon from "@/components/Ribbon";
+import NavBar from "@/components/navbar";
 import { Link } from "@heroui/link";
 
 export default function DefaultLayout({
@@ -8,8 +8,7 @@ export default function DefaultLayout({
 }) {
   return (
     <>
-      {/* <Ribbon /> */}
-      <Ribbon />
+      <NavBar />
       <div className="relative flex flex-col h-screen">
         <main className="container mx-auto max-w-7xl px-6 flex-grow pt-16">
           {children}

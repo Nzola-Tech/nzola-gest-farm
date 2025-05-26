@@ -1,5 +1,5 @@
 import { Tabs, Tab } from '@heroui/tabs';
-import { ThemeSwitch } from './theme-switch';
+import { ThemeSwitch } from '../theme-switch';
 import { siteConfig } from '@/config/site';
 import { useLocation } from 'react-router-dom';
 
@@ -9,7 +9,7 @@ const tabs = siteConfig.navItems.map((item) => ({
     content: item.content // Use empty array if content is not defined
 }));
 
-export default function Ribbon2() {
+export default function NavBar() {
     const { pathname } = useLocation()
     return (
         <div className="w-full">

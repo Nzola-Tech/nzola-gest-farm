@@ -2,7 +2,7 @@
   "$schema": "../node_modules/@tauri-apps/cli/config.schema.json",
   "productName": "Nzola Gest Farmácia",
   "version": "0.1.0",
-  "identifier": "com.tauri.dev",
+  "identifier": "NGF",
   "build": {
     "frontendDist": "./frontend",
     "devUrl": "http://localhost:5173",
@@ -36,5 +36,10 @@
       "icons/icon.icns",
       "icons/icon.ico"
     ]
+  },
+  "plugins": {
+    "sqlite": {
+      "preload":["sqlite:ngfdb.db"]
+    }
   }
 }

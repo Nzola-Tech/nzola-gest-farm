@@ -1,8 +1,8 @@
 import AddProduct from "@/components/products/addProduct";
 import DefaultLayout from "@/layouts/default";
 import { Button } from "@heroui/button";
-import { Produto } from "@/types/products";
-import { useState } from "react";
+import { initialState, Product } from "@/types/products";
+import { useEffect, useState } from "react";
 import {
   Modal,
   ModalContent,
@@ -10,30 +10,43 @@ import {
   ModalBody,
   useDisclosure
 } from "@heroui/modal";
-
-const initialState: Produto = {
-  nome: "",
-  descricao: "",
-  fabricante: "",
-  registroAnvisa: "",
-  lote: "",
-  dataValidade: "",
-  quantidadeEstoque: 0,
-  precoVenda: 0,
-  precoCusto: 0,
-  controlado: false,
-  prescricaoObrigatoria: false,
-  categoria: "",
-  formaFarmaceutica: "",
-};
+import Database from '@tauri-apps/plugin-sql';
+import EditProduct from "@/components/products/editProduct";
+import AllProducts from "@/components/products/allProducts";
 
 export default function Produtos() {
-  const [product, setProduct] = useState<Produto>(initialState);
+  const [product, setProduct] = useState<Product>(initialState);
+  const [products, setProducts] = useState<Product[]>([]);
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const [db, setDb] = useState<Database | null>(null);
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  const [editOpen, setEditOpen] = useState(false);
+  const fetchProducts = async (database: Database) => {
+    const result = await database.select("SELECT * FROM products");
+    setProducts(result as Product[]);
+  };
+
+  useEffect(() => {
+    const initDb = async () => {
+      const database = await Database.load("sqlite:ngf.db")
+      setDb(database)
+      setProduct(initialState);
+      fetchProducts(database);
+    }
+    initDb()
+  }, []);
   return (
     <>
       <DefaultLayout>
         <Button variant="solid" color="primary" onPress={onOpen}>Adicionar Produto</Button>
+        <Button variant="solid" color="primary" className="ml-8" onPress={() => { setEditOpen(true); setSelectedProduct(product); }}>Editar Produto</Button>
+        <AllProducts
+          products={products}
+          setEditOpen={setEditOpen}
+          setSelectedProduct={setSelectedProduct}
+          db={db}
+          onProductChange={() => db && fetchProducts(db)}
+        />
         <Modal isOpen={isOpen} size="5xl" backdrop="blur" onOpenChange={onOpenChange} scrollBehavior="inside">
           <ModalContent>
             {
@@ -41,7 +54,48 @@ export default function Produtos() {
                 <>
                   <ModalHeader className="flex flex-col gap-1 text-3xl">Adiconar Produto</ModalHeader>
                   <ModalBody>
-                    <AddProduct product={product} setProduct={setProduct} />
+                    <AddProduct
+                      product={product}
+                      setProduct={setProduct}
+                      db={db}
+                      onProductChange={() =>
+                        db && fetchProducts(db)
+                      }
+                      onClose={onOpenChange}
+                    />
+                  </ModalBody>
+                </>
+              )
+            }
+          </ModalContent>
+        </Modal>
+        <Modal isOpen={editOpen} size="5xl" backdrop="blur" onOpenChange={setEditOpen} scrollBehavior="inside">
+          <ModalContent>
+            {
+              () => (
+                <>
+                  <ModalHeader className="flex flex-col gap-1 text-3xl">Editar Produto</ModalHeader>
+                  <ModalBody>
+                    {selectedProduct && (
+                      <EditProduct
+                        product={selectedProduct}
+                        setProduct={(updatedProduct) => {
+                          // Only update if updatedProduct is not null
+                          if (typeof updatedProduct === "function") {
+                            setSelectedProduct((prev) => {
+                              if (prev === null) return prev;
+                              // @ts-ignore
+                              return updatedProduct(prev);
+                            });
+                          } else if (updatedProduct !== null) {
+                            setSelectedProduct(updatedProduct);
+                          }
+                        }}
+                        db={db}
+                        onProductChange={() => db && fetchProducts(db)}
+                        onClose={() => setEditOpen(false)}
+                      />
+                    )}
                   </ModalBody>
                 </>
               )

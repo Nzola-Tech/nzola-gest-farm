@@ -9,7 +9,7 @@ export default function DefaultLayout({
     <>
       <NavBar />
       <div className="relative flex flex-col">
-        <main className="container max-w-7xl px-3 flex-grow">
+        <main className="container w-full px-3 flex-grow">
           {children}
         </main>
       </div>

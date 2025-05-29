@@ -3,13 +3,12 @@ import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, getKey
 import { allProductsProps } from "@/types/products";
 import { Button } from "@heroui/button";
 import { Pagination } from "@heroui/pagination";
-
 const AllProducts: React.FC<allProductsProps> = ({
     products,
     setEditOpen,
     setSelectedProduct,
     db,
-    onProductChange
+    onProductChange,
 }) => {
 
     const [page, setPage] = React.useState(1);
@@ -31,7 +30,7 @@ const AllProducts: React.FC<allProductsProps> = ({
     return (
         <>
             <Table
-                aria-label="Example empty table"
+                aria-label="Nenhum produto encontrado"
                 color="primary"
                 className="mt-4"
                 bottomContent={
@@ -58,36 +57,67 @@ const AllProducts: React.FC<allProductsProps> = ({
                     <TableColumn>Data de Validade</TableColumn>
                     <TableColumn>Forma Farmacêutica</TableColumn>
                     <TableColumn>Descrição</TableColumn>
+                    <TableColumn>Estoque</TableColumn>
+                    <TableColumn>Validade</TableColumn>
+                    <TableColumn>Alertas</TableColumn>
                     <TableColumn>Actions</TableColumn>
                 </TableHeader>
                 <TableBody emptyContent={"No rows to display."} items={items}>{
                     items.map((product) => (
-                        <TableRow key={getKeyValue(product, "id")}>
+                        <TableRow key={product.id}>
                             <TableCell>{product.id}</TableCell>
                             <TableCell>{product.name}</TableCell>
                             <TableCell>{product.category}</TableCell>
                             <TableCell>{product.manufacturer}</TableCell>
-                            <TableCell>{product.sale_price}</TableCell>
-                            <TableCell>{product.cost_price}</TableCell>
-                            <TableCell>{product.expiration_date}</TableCell>
-                            <TableCell>{product.pharmaceutical_form}</TableCell>
+                            <TableCell>{product.sale_price.toFixed(2)}</TableCell>
+                            <TableCell>{product.cost_price.toFixed(2)}</TableCell>
+                            <TableCell>
+                                {(() => {
+                                    const expDate = new Date(product.expiration_date);
+                                    const now = new Date();
+                                    const diffTime = expDate.getTime() - now.getTime();
+                                    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                                    if (diffDays <= 30 && diffDays > 0) {
+                                        return (
+                                            <span className="text-red-600">{diffDays} dias restantes</span>
+                                        );
+                                    }
+                                    return <span className="text-green-600">{expDate.toLocaleDateString()}</span>;
+                                })()}
+                            </TableCell>
+                            <TableCell>{product.pharmaceutical_form || "N/A"}</TableCell>
                             <TableCell>{product.description}</TableCell>
                             <TableCell>
+                                {
+                                    product.stock_quantity <= 10 ?
+                                        <span className="text-red-600">{product.stock_quantity}</span> :
+                                        <span className="text-green-600">{product.stock_quantity}</span>
+                                }
+                            </TableCell>
+                            <TableCell>{new Date(product.created_at).toLocaleDateString()}</TableCell>
+                            <TableCell className="text-center">
+                                {
+                                    product.stock_quantity <= 10 ?
+                                        <span className="text-red-600">Baixo Estoque</span> :
+                                        <span className="text-green-600">Em Estoque</span>
+                                }
+                            </TableCell>
+                            <TableCell className="flex gap-2">
                                 <Button
-                                    variant="solid"
+                                    color="primary"
                                     onPress={() => {
-                                        setEditOpen(true);
                                         setSelectedProduct(product);
+                                        setEditOpen(true);
                                     }}
-                                >Edit</Button>
+                                >
+                                    Editar
+                                </Button>
                                 <Button
-                                    className="ml-2"
-                                    variant="solid"
                                     color="danger"
-                                    onPress={() => {
-                                        product.id !== undefined && handleDelete(product.id)
-                                    }}
-                                >Delete</Button>
+                                    onPress={() => handleDelete(product.id!)}
+                                >
+                                    Excluir
+                                </Button>
                             </TableCell>
                         </TableRow>
                     ))

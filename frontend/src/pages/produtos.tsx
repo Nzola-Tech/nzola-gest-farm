@@ -13,6 +13,7 @@ import {
 import Database from '@tauri-apps/plugin-sql';
 import EditProduct from "@/components/products/editProduct";
 import AllProducts from "@/components/products/allProducts";
+import InventoryModal from "@/components/products/InventoryModal";
 
 export default function Produtos() {
   const [product, setProduct] = useState<Product>(initialState);
@@ -25,6 +26,7 @@ export default function Produtos() {
     const result = await database.select("SELECT * FROM products");
     setProducts(result as Product[]);
   };
+  const [inventoryOpen, setInventoryOpen] = useState(false);
 
   useEffect(() => {
     const initDb = async () => {
@@ -38,14 +40,27 @@ export default function Produtos() {
   return (
     <>
       <DefaultLayout>
-        <Button variant="solid" color="primary" onPress={onOpen}>Adicionar Produto</Button>
-        <Button variant="solid" color="primary" className="ml-8" onPress={() => { setEditOpen(true); setSelectedProduct(product); }}>Editar Produto</Button>
+        <div className="flex flex-row gap-4">
+          <Button variant="solid" color="primary" onPress={onOpen}>Adicionar Produto</Button>
+          <Button variant="solid" color="primary" onPress={() => { setEditOpen(true); setSelectedProduct(product); }}>Editar Produto</Button>
+
+          <Button color="primary" onPress={() => setInventoryOpen(true)}>
+            Inventário Diário
+          </Button>
+        </div>
+
         <AllProducts
           products={products}
           setEditOpen={setEditOpen}
           setSelectedProduct={setSelectedProduct}
           db={db}
           onProductChange={() => db && fetchProducts(db)}
+          onOpenInventory={() => setInventoryOpen(true)}
+        />
+        <InventoryModal
+          open={inventoryOpen}
+          onClose={() => setInventoryOpen(false)}
+          products={products}
         />
         <Modal isOpen={isOpen} size="5xl" backdrop="blur" onOpenChange={onOpenChange} scrollBehavior="inside">
           <ModalContent>

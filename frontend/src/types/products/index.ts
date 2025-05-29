@@ -1,21 +1,7 @@
 import Database from "@tauri-apps/plugin-sql";
 
-/* export type Product = {
-  nome: string;
-  descricao: string;
-  fabricante: string;
-  registroAnvisa: string;
-  lote: string;
-  dataValidade: string;
-  quantidadeEstoque: number;
-  precoVenda: number;
-  precoCusto: number;
-  controlado: boolean;
-  prescricaoObrigatoria: boolean;
-  categoria: string;
-  formaFarmaceutica: string;
-};
- */
+export const MIN_STOCK = 10;
+
 export interface Product {
   id?: number; // Optional, since it's usually auto-generated
   name: string;
@@ -63,6 +49,7 @@ export interface allProductsProps {
     setSelectedProduct: React.Dispatch<React.SetStateAction<Product | null>>;
     db: Database | null;
     onProductChange?: () => void;
+    onOpenInventory?: () => void;
 }
 
 export interface EditProductProps  {

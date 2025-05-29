@@ -13,7 +13,7 @@ import {
 import Database from '@tauri-apps/plugin-sql';
 import EditProduct from "@/components/products/editProduct";
 import AllProducts from "@/components/products/allProducts";
-import InventoryModal from "@/components/products/InventoryModal";
+import InventoryModal from "@/components/products/inventoryModal";
 
 export default function Produtos() {
   const [product, setProduct] = useState<Product>(initialState);

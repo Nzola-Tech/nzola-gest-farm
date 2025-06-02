@@ -5,6 +5,7 @@ export const MIN_STOCK = 10;
 export interface Product {
   id?: number; // Optional, since it's usually auto-generated
   name: string;
+  barcode?: string; 
   description: string;
   manufacturer: string;
   expiration_date: string; // ISO format: 'YYYY-MM-DD'
@@ -21,6 +22,7 @@ export interface Product {
 
 export const initialState: Product = {
   name: "",
+  barcode: "",
   description: "",
   manufacturer: "",
   expiration_date: "",

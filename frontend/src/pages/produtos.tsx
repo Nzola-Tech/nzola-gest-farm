@@ -2,7 +2,7 @@ import AddProduct from "@/components/products/addProduct";
 import DefaultLayout from "@/layouts/default";
 import { Button } from "@heroui/button";
 import { initialState, Product } from "@/types/products";
-import { useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import {
   Modal,
   ModalContent,
@@ -10,40 +10,25 @@ import {
   ModalBody,
   useDisclosure
 } from "@heroui/modal";
-import Database from '@tauri-apps/plugin-sql';
 import EditProduct from "@/components/products/editProduct";
 import AllProducts from "@/components/products/allProducts";
 import InventoryModal from "@/components/products/inventoryModal";
+import { fetchProducts } from "@/database/products";
+import { DbContext } from "@/context/db";
 
 export default function Produtos() {
   const [product, setProduct] = useState<Product>(initialState);
-  const [products, setProducts] = useState<Product[]>([]);
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
-  const [db, setDb] = useState<Database | null>(null);
+  const {db,products,refreshProducts} = useContext(DbContext)
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [editOpen, setEditOpen] = useState(false);
-  const fetchProducts = async (database: Database) => {
-    const result = await database.select("SELECT * FROM products");
-    setProducts(result as Product[]);
-  };
   const [inventoryOpen, setInventoryOpen] = useState(false);
 
-  useEffect(() => {
-    const initDb = async () => {
-      const database = await Database.load("sqlite:ngf.db")
-      setDb(database)
-      setProduct(initialState);
-      fetchProducts(database);
-    }
-    initDb()
-  }, []);
   return (
     <>
       <DefaultLayout>
-        <div className="flex flex-row gap-4">
+        <div className="flex flex-row-reverse gap-4">
           <Button variant="solid" color="primary" onPress={onOpen}>Adicionar Produto</Button>
-          <Button variant="solid" color="primary" onPress={() => { setEditOpen(true); setSelectedProduct(product); }}>Editar Produto</Button>
-
           <Button color="primary" onPress={() => setInventoryOpen(true)}>
             Inventário Diário
           </Button>
@@ -54,7 +39,7 @@ export default function Produtos() {
           setEditOpen={setEditOpen}
           setSelectedProduct={setSelectedProduct}
           db={db}
-          onProductChange={() => db && fetchProducts(db)}
+          onProductChange={refreshProducts}
           onOpenInventory={() => setInventoryOpen(true)}
         />
         <InventoryModal
@@ -73,9 +58,7 @@ export default function Produtos() {
                       product={product}
                       setProduct={setProduct}
                       db={db}
-                      onProductChange={() =>
-                        db && fetchProducts(db)
-                      }
+                      onProductChange={refreshProducts}
                       onClose={onOpenChange}
                     />
                   </ModalBody>
@@ -95,7 +78,6 @@ export default function Produtos() {
                       <EditProduct
                         product={selectedProduct}
                         setProduct={(updatedProduct) => {
-                          // Only update if updatedProduct is not null
                           if (typeof updatedProduct === "function") {
                             setSelectedProduct((prev) => {
                               if (prev === null) return prev;
@@ -107,7 +89,7 @@ export default function Produtos() {
                           }
                         }}
                         db={db}
-                        onProductChange={() => db && fetchProducts(db)}
+                        onProductChange={refreshProducts}
                         onClose={() => setEditOpen(false)}
                       />
                     )}

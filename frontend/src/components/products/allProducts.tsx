@@ -1,5 +1,5 @@
 import React, { useMemo } from "react";
-import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, getKeyValue } from "@heroui/table";
+import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell } from "@heroui/table";
 import { allProductsProps } from "@/types/products";
 import { Button } from "@heroui/button";
 import { Pagination } from "@heroui/pagination";

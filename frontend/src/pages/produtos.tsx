@@ -13,7 +13,6 @@ import {
 import EditProduct from "@/components/products/editProduct";
 import AllProducts from "@/components/products/allProducts";
 import InventoryModal from "@/components/products/inventoryModal";
-import { fetchProducts } from "@/database/products";
 import { DbContext } from "@/context/db";
 
 export default function Produtos() {

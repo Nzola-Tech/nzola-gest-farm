@@ -21,7 +21,7 @@ function App() {
           <Route element={<Produtos />} path="/produtos" />
           <Route element={<Clientes />} path="/clientes" />
           <Route element={<Estoque />} path="/estoque" />
-          <Route element={<VendasPdv />} path="/venda-pdv" />
+          <Route element={<VendasPdv />} path="/vendas" />
           <Route element={<Financas />} path="/financas" />
           <Route element={<BeckupSeguranca />} path="/backup-seguranca" />
         </Routes>

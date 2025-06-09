@@ -10,8 +10,8 @@ export const siteConfig = {
       content: ['Dados da Empresa', 'Minha Agenda', 'Alterar Minha Senha']
     },
     {
-      label: "VENDAS & PDV",
-      href: "/venda-pdv",
+      label: "VENDAS",
+      href: "/vendas",
       content: ['QUIANNI Suporte (QS)', 'Denuncie']
     },
     {

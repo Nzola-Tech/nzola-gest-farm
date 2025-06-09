@@ -1,8 +1,8 @@
 [package]
-name = "app"
+name = "nzola-gest-farmacia"
 version = "0.1.0"
 description = "A Tauri App"
-authors = ["you"]
+authors = ["Nzola Tech"]
 license = ""
 repository = ""
 edition = "2021"
@@ -23,3 +23,7 @@ serde = { version = "1.0", features = ["derive"] }
 log = "0.4"
 tauri = { version = "2.5.0", features = [] }
 tauri-plugin-log = "2.0.0-rc"
+
+[dependencies.tauri-plugin-sql]
+features = ["postgres", "sqlite"]
+version = "2.0.0"

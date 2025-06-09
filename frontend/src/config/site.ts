@@ -1,29 +1,50 @@
 export type SiteConfig = typeof siteConfig;
 
 export const siteConfig = {
-  name: "Vite + HeroUI",
-  description: "Make beautiful websites regardless of your design experience.",
+  name: "Nzola Gest Farmácia",
+  description: "Gerenciamento de farmácias de maneira eficiente e prática.",
   navItems: [
     {
-      label: "Home",
+      label: "HOME",
       href: "/",
+      content: ['Dados da Empresa', 'Minha Agenda', 'Alterar Minha Senha']
     },
     {
-      label: "Docs",
-      href: "/docs",
+      label: "VENDAS",
+      href: "/vendas",
+      content: ['QUIANNI Suporte (QS)', 'Denuncie']
     },
     {
-      label: "Pricing",
-      href: "/pricing",
+      label: "PRODUTOS",
+      href: "/produtos",
+      content: ['Criar Produto'],
+      function: {
+        addProd: "addProduct",
+        rmProd: "rmProduct",
+        del: "delProduct",
+        edit:"editProduct"
+      }
     },
     {
-      label: "Blog",
-      href: "/blog",
+      label: "ESTOQUE",
+      href: "/estoque",
+      content: ['Utilizadores', 'Perfil de Utilizadores']
     },
     {
-      label: "About",
-      href: "/about",
+      label: "FINANÇAS",
+      href: "/financas",
+      content: ['Gestão de Idiomas', 'Ajuda', 'Configurações']
     },
+    {
+      label: "CLIENTES",
+      href: "/clientes",
+      content: ['Configuração Jabakule (SMS)']
+    },
+    {
+      label: "BACKUP & SEGURANÇA",
+      href: "/backup-seguranca",
+      content: ['Gestão de Idiomas', 'Ajuda', 'Configurações']
+    }
   ],
   navMenuItems: [
     {
@@ -60,10 +81,6 @@ export const siteConfig = {
     },
   ],
   links: {
-    github: "https://github.com/frontio-ai/heroui",
-    twitter: "https://twitter.com/hero_ui",
-    docs: "https://heroui.com",
-    discord: "https://discord.gg/9b6yyZKmH4",
-    sponsor: "https://patreon.com/jrgarciadev",
+   
   },
 };

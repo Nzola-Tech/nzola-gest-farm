@@ -1,20 +1,32 @@
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, useHref, useNavigate } from "react-router-dom";
 
-import IndexPage from "@/pages/index";
-import DocsPage from "@/pages/docs";
-import PricingPage from "@/pages/pricing";
-import BlogPage from "@/pages/blog";
-import AboutPage from "@/pages/about";
+import Home from "@/pages/index";
+import Produtos from "./pages/produtos";
+import Clientes from "./pages/clientes";
+import Estoque from "./pages/estoque";
+import VendasPdv from "./pages/vendas-pdv";
+import Financas from "./pages/financas";
+import BeckupSeguranca from "./pages/backup-seguranca";
+import { HeroUIProvider } from "@heroui/system";
+import { ContextProvider } from "./components/contextProvider";
+
 
 function App() {
+  const navegate = useNavigate()
   return (
-    <Routes>
-      <Route element={<IndexPage />} path="/" />
-      <Route element={<DocsPage />} path="/docs" />
-      <Route element={<PricingPage />} path="/pricing" />
-      <Route element={<BlogPage />} path="/blog" />
-      <Route element={<AboutPage />} path="/about" />
-    </Routes>
+    <ContextProvider>
+      <HeroUIProvider navigate={navegate} useHref={useHref} >
+        <Routes>
+          <Route element={<Home />} path="/" />
+          <Route element={<Produtos />} path="/produtos" />
+          <Route element={<Clientes />} path="/clientes" />
+          <Route element={<Estoque />} path="/estoque" />
+          <Route element={<VendasPdv />} path="/vendas" />
+          <Route element={<Financas />} path="/financas" />
+          <Route element={<BeckupSeguranca />} path="/backup-seguranca" />
+        </Routes>
+      </HeroUIProvider>
+    </ContextProvider>
   );
 }
 

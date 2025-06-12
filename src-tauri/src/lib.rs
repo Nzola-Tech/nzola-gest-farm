@@ -1,11 +1,7 @@
-use tauri_plugin_sql::{
-    Migration,
-    MigrationKind,
-};
+use tauri_plugin_sql::{Migration, MigrationKind};
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
-
     let migrations = vec![
         // Define your migrations here
         Migration {
@@ -28,7 +24,33 @@ pub fn run() {
                 updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
             );",
             kind: MigrationKind::Up,
-        }
+        },
+        Migration {
+            version: 2,
+            description: "create_initial_tables",
+            sql: "CREATE TABLE IF NOT EXISTS sales (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                total REAL NOT NULL,
+                payment_method TEXT NOT NULL,
+                created_at TEXT NOT NULL
+            );",
+            kind: MigrationKind::Up,
+        },
+        Migration {
+            version: 3,
+            description: "create_initial_tables",
+            sql: "CREATE TABLE IF NOT EXISTS sale_items (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                sale_id INTEGER NOT NULL,
+                product_id INTEGER NOT NULL,
+                quantity INTEGER NOT NULL,
+                price REAL NOT NULL,
+                created_at TEXT NOT NULL,
+                FOREIGN KEY (sale_id) REFERENCES sales(id),
+                FOREIGN KEY (product_id) REFERENCES products(id)
+            );",
+            kind: MigrationKind::Up,
+        },
     ];
 
     tauri::Builder::default()

@@ -6,20 +6,55 @@ import { ScrollShadow } from "@heroui/scroll-shadow"
 import { Select, SelectItem } from "@heroui/select"
 import { useContext } from "react"
 import { Form } from "@heroui/form"
+import { DbContext } from "@/context/db"
 
 export const SellForm = () => {
   const { cart, removeFromCart, payment, updateQuantity } = useContext(PdvContext)
   const total = cart.reduce(
-    (sum, item) => sum + item.sale_price * item.quantity,0);
+    (sum, item) => sum + item.sale_price * item.quantity, 0);
+  const {db,refreshProducts} = useContext(DbContext)
+  const { setCart } = useContext(PdvContext)
+  
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!db || cart.length === 0) return;
+
+    // 1. Cria a venda
+    const now = new Date().toISOString();
+    await db.execute(
+      "INSERT INTO sales (total, payment_method, created_at) VALUES ($1, $2, $3)",
+      [total, payment, now]
+    );
+    // 2. Pega o id da venda recém criada
+    const [{ id: saleId }] = (await db.select("SELECT last_insert_rowid() as id")) as { id: number }[];
+
+    // 3. Cria os itens da venda e atualiza estoque
+    for (const item of cart) {
+      await db.execute(
+        "INSERT INTO sale_items (sale_id, product_id, quantity, price, created_at) VALUES ($1, $2, $3, $4, $5)",
+        [saleId, item.id, item.quantity, item.sale_price, now]
+      );
+      await db.execute(
+        "UPDATE products SET stock_quantity = stock_quantity - $1 WHERE id = $2",
+        [item.quantity, item.id]
+      );
+    }
+
+    // 4. Limpa o carrinho e atualiza produtos
+    setCart([]);
+    refreshProducts && refreshProducts();
+    alert("Venda realizada com sucesso!");
+  };
   return (
     <Form
+      onSubmit={handleSubmit}
       className="overflow-auto col-span-4"
     >
 
       <div className="w-full grid grid-row-8 h-full">
-        <div className="relative bg-slate-100 p-4 rounded-t-3xl">
+        <div className="relative bg-slate-100 dark:bg-zinc-800 dark:text-white p-4 rounded-t-3xl">
           <div>
-            <h1 className="font-bold text-lg ">Nzola Gest Farmacia</h1>
+            <h1 className="font-bold text-lg">Nzola Gest Farmacia</h1>
             <p>Factura</p>
           </div>
           <div className="flex justify-between items-center">
@@ -67,7 +102,7 @@ export const SellForm = () => {
           )}
         </ScrollShadow>
 
-        <div className="flex flex-col items-end justify-end gap-2 bg-slate-100 p-4">
+        <div className="flex flex-col items-end justify-end gap-2 bg-slate-100 p-4 dark:bg-zinc-800">
           <Select
             label="Modo de pagamento"
             value={payment}

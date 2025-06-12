@@ -11,6 +11,7 @@ export type PdvContextProps = {
   removeFromCart: (id: number) => void
   updateQuantity: (id: number, quantity: number) => void
   setSelectedKeys: React.Dispatch<React.SetStateAction<Selection>>
+  setCart: React.Dispatch<React.SetStateAction<CartItem[]>>
 
 }
 
@@ -54,7 +55,7 @@ export const PdvProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   return (
     <>
-      <PdvContext.Provider value={{ cart, payment, selectedKeys, changePayment, addToCart, removeFromCart, updateQuantity, setSelectedKeys}}>
+      <PdvContext.Provider value={{ cart, payment, selectedKeys, changePayment, addToCart, removeFromCart, updateQuantity, setSelectedKeys,setCart}}>
         {children}
       </PdvContext.Provider>
     </>

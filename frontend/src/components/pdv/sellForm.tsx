@@ -7,15 +7,15 @@ import { Select, SelectItem } from "@heroui/select"
 import { useContext } from "react"
 import { Form } from "@heroui/form"
 import { DbContext } from "@/context/db"
-
+import { NumberInput } from "@heroui/number-input";
 export const SellForm = () => {
   const { cart, removeFromCart, payment, updateQuantity } = useContext(PdvContext)
   const total = cart.reduce(
     (sum, item) => sum + item.sale_price * item.quantity, 0);
-  const {db,refreshProducts} = useContext(DbContext)
+  const { db, refreshProducts } = useContext(DbContext)
   const { setCart } = useContext(PdvContext)
-  
-  const handleSubmit = async (e: React.FormEvent) => {
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!db || cart.length === 0) return;
 
@@ -43,7 +43,7 @@ export const SellForm = () => {
     // 4. Limpa o carrinho e atualiza produtos
     setCart([]);
     refreshProducts && refreshProducts();
-    alert("Venda realizada com sucesso!");
+    e.currentTarget.reset()
   };
   return (
     <Form
@@ -103,14 +103,26 @@ export const SellForm = () => {
         </ScrollShadow>
 
         <div className="flex flex-col items-end justify-end gap-2 bg-slate-100 p-4 dark:bg-zinc-800">
+          <NumberInput
+            label="PAGAMENTO"
+            placeholder="0.00"
+            variant="underlined"
+            required
+            errorMessage="Preencha este campo"
+            startContent={
+              <div className="pointer-events-none flex items-center">
+                <span className="text-default-400 text-small">$</span>
+              </div>
+            }
+          />
           <Select
             label="Modo de pagamento"
-            value={payment}
-            variant="faded"
+            name="paymentMode"
+            variant="underlined"
             size="md"
             placeholder="Selecione um metodo"
             className="w-[217.5px]"
-
+            required
           >
             {paymentOptions.map((pay) => (
               <SelectItem key={pay.value}>

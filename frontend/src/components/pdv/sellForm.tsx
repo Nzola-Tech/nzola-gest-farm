@@ -4,47 +4,44 @@ import { ShoppingCartIcon, CheckIcon, XMarkIcon } from "@heroicons/react/24/outl
 import { ButtonGroup, Button } from "@heroui/button"
 import { ScrollShadow } from "@heroui/scroll-shadow"
 import { Select, SelectItem } from "@heroui/select"
-import { useContext } from "react"
+import { Selection } from "@heroui/table";
+import { useContext, useEffect, useState } from "react"
 import { Form } from "@heroui/form"
 import { DbContext } from "@/context/db"
 import { NumberInput } from "@heroui/number-input";
+import { insertSale, insertSaleItemsAndUpdateStock } from "@/database"
+
 export const SellForm = () => {
-  const { cart, removeFromCart, payment, updateQuantity } = useContext(PdvContext)
-  const total = cart.reduce(
-    (sum, item) => sum + item.sale_price * item.quantity, 0);
+  const { cart, removeFromCart, payment, updateQuantity, setCart, setSelectedKeys } = useContext(PdvContext)
   const { db, refreshProducts } = useContext(DbContext)
-  const { setCart } = useContext(PdvContext)
+  const [totalPayment, setTotalPayment] = useState(0)
+  const [paymentMode, setPaymentMode] = useState<Selection>(new Set([paymentOptions[0].value]))
+  const [paymentError, setPaymentError] = useState(false)
+  const total = cart.reduce((sum, item) => sum + item.sale_price * item.quantity, 0);
+
+  useEffect(() => {
+    setTotalPayment(cart.reduce((sum, item) => sum + item.sale_price * item.quantity, 0));
+  }, [cart])
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!db || cart.length === 0) return;
-
-    // 1. Cria a venda
-    const now = new Date().toISOString();
-    await db.execute(
-      "INSERT INTO sales (total, payment_method, created_at) VALUES ($1, $2, $3)",
-      [total, payment, now]
-    );
-    // 2. Pega o id da venda recém criada
-    const [{ id: saleId }] = (await db.select("SELECT last_insert_rowid() as id")) as { id: number }[];
-
-    // 3. Cria os itens da venda e atualiza estoque
-    for (const item of cart) {
-      await db.execute(
-        "INSERT INTO sale_items (sale_id, product_id, quantity, price, created_at) VALUES ($1, $2, $3, $4, $5)",
-        [saleId, item.id, item.quantity, item.sale_price, now]
-      );
-      await db.execute(
-        "UPDATE products SET stock_quantity = stock_quantity - $1 WHERE id = $2",
-        [item.quantity, item.id]
-      );
+    console.log(totalPayment)
+    if (totalPayment === 0 || totalPayment < total) {
+      setPaymentError(true);
+      return;
     }
+    const now = new Date().toISOString();
+    const saleId = await insertSale(db, total, payment, now);
+    await insertSaleItemsAndUpdateStock(db, saleId, cart, now);
 
-    // 4. Limpa o carrinho e atualiza produtos
+    setTotalPayment(0);
     setCart([]);
+    setSelectedKeys(new Set([]))
+    setPaymentMode(new Set([]));
     refreshProducts && refreshProducts();
-    e.currentTarget.reset()
   };
+
   return (
     <Form
       onSubmit={handleSubmit}
@@ -60,6 +57,10 @@ export const SellForm = () => {
           <div className="flex justify-between items-center">
             <p>Total a pagar</p>
             <h2 className="text-right text-3xl font-semibold text-green-400">{total.toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}KZ</h2>
+          </div>
+          <div className="flex justify-between items-center">
+            <p>Troco</p>
+            <h2 className="text-right text-lg font-semibold text-green-400">{(totalPayment - total).toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}KZ</h2>
           </div>
         </div>
 
@@ -90,13 +91,6 @@ export const SellForm = () => {
                 >
                   Adicionar
                 </Button>
-                <Button
-                  type="button"
-                  onPress={() => updateQuantity(item.id, item.quantity - 1)}
-                  className="text-blue-500 hover:text-blue-700"
-                >
-                  Remover
-                </Button>
               </div>
             ))
           )}
@@ -104,11 +98,26 @@ export const SellForm = () => {
 
         <div className="flex flex-col items-end justify-end gap-2 bg-slate-100 p-4 dark:bg-zinc-800">
           <NumberInput
+            hideStepper
+            isRequired
             label="PAGAMENTO"
-            placeholder="0.00"
             variant="underlined"
-            required
-            errorMessage="Preencha este campo"
+            name="totalPayment"
+            placeholder="0.00"
+            formatOptions={{
+              style: "currency",
+              currency: "AOA",
+            }}
+            value={totalPayment == 0 ? undefined : totalPayment}
+            onValueChange={(value) => {
+              if (value < 0) {
+                setPaymentError(true)
+              } else {
+                setTotalPayment(value)
+              }
+            }}
+            errorMessage={paymentError ? `Pagamento inválido total a pagar ${total.toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 })} Kz` : undefined}
+            isInvalid={paymentError}
             startContent={
               <div className="pointer-events-none flex items-center">
                 <span className="text-default-400 text-small">$</span>
@@ -116,17 +125,19 @@ export const SellForm = () => {
             }
           />
           <Select
+            isRequired
             label="Modo de pagamento"
             name="paymentMode"
             variant="underlined"
             size="md"
             placeholder="Selecione um metodo"
             className="w-[217.5px]"
-            required
+            selectedKeys={paymentMode}
+            onSelectionChange={setPaymentMode}
           >
             {paymentOptions.map((pay) => (
               <SelectItem key={pay.value}>
-                {pay.label}
+                {pay.key}
               </SelectItem>
             ))}
           </Select>
@@ -143,6 +154,13 @@ export const SellForm = () => {
               type="reset"
               className="bg-red-600 text-white"
               endContent={<XMarkIcon className="size-5" />}
+              onPress={() => {
+                setTotalPayment(0);
+                setCart([]);
+                setSelectedKeys(new Set([]))
+                setPaymentMode(new Set([]));
+                refreshProducts && refreshProducts();
+              }}
             >
               Cancela
             </Button>

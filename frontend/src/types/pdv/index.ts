@@ -15,7 +15,7 @@ export type CartItem = {
 
 
 export const paymentOptions = [
-  { label: "Dinheiro", value: "dinheiro" },
-  { label: "Cartão", value: "cartao" },
-  { label: "Crédito", value: "credito" },
+  { key: "dinheiro", value: "Dinheiro" },
+  { key: "cartão", value: "Cartão" },
+  { key: "crédito", value: "Crédito" },
 ];

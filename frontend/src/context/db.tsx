@@ -1,4 +1,4 @@
-import { fetchProducts } from "@/database/products";
+import { fetchProducts } from "@/database";
 import { DbContextType } from "@/types/database";
 import { Product } from "@/types/products";
 import Database from "@tauri-apps/plugin-sql";

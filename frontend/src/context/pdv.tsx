@@ -38,7 +38,7 @@ export const PdvProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     setCart(prev => prev.filter(item => item.id !== id));
     setSelectedKeys(prev => {
       const newKeys = new Set(prev);
-      newKeys.delete(String(id));
+      newKeys.delete(String(id)); // Remove só o item removido do carrinho
       return newKeys;
     });
   };
@@ -55,7 +55,7 @@ export const PdvProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   return (
     <>
-      <PdvContext.Provider value={{ cart, payment, selectedKeys, changePayment, addToCart, removeFromCart, updateQuantity, setSelectedKeys,setCart}}>
+      <PdvContext.Provider value={{ cart, payment, selectedKeys, changePayment, addToCart, removeFromCart, updateQuantity, setSelectedKeys, setCart }}>
         {children}
       </PdvContext.Provider>
     </>

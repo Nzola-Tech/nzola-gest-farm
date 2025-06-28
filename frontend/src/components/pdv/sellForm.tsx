@@ -3,7 +3,7 @@ import { paymentOptions } from "@/types/pdv"
 import { ShoppingCartIcon, CheckIcon, XMarkIcon } from "@heroicons/react/24/outline"
 import { ButtonGroup, Button } from "@heroui/button"
 import { ScrollShadow } from "@heroui/scroll-shadow"
-import { Select,SelectItem} from "@heroui/select"
+import { Select, SelectItem } from "@heroui/select"
 import { Selection } from "@heroui/table";
 import { useContext, useEffect, useState } from "react"
 import { Form } from "@heroui/form"
@@ -18,10 +18,10 @@ export const SellForm = () => {
   const [paymentMode, setPaymentMode] = useState<Selection>(new Set([paymentOptions[0].value]))
   const [paymentError, setPaymentError] = useState(false)
   const total = cart.reduce((sum, item) => sum + item.sale_price * item.quantity, 0);
-  
-  useEffect(()=>{
+
+  useEffect(() => {
     setTotalPayment(cart.reduce((sum, item) => sum + item.sale_price * item.quantity, 0));
-  },[cart])
+  }, [cart])
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -108,11 +108,11 @@ export const SellForm = () => {
               style: "currency",
               currency: "AOA",
             }}
-            value={totalPayment == 0 ? undefined: totalPayment}
-            onValueChange={(value)=>{
-              if(value < 0){
+            value={totalPayment == 0 ? undefined : totalPayment}
+            onValueChange={(value) => {
+              if (value < 0) {
                 setPaymentError(true)
-              }else {
+              } else {
                 setTotalPayment(value)
               }
             }}
@@ -154,6 +154,13 @@ export const SellForm = () => {
               type="reset"
               className="bg-red-600 text-white"
               endContent={<XMarkIcon className="size-5" />}
+              onPress={() => {
+                setTotalPayment(0);
+                setCart([]);
+                setSelectedKeys(new Set([]))
+                setPaymentMode(new Set([]));
+                refreshProducts && refreshProducts();
+              }}
             >
               Cancela
             </Button>

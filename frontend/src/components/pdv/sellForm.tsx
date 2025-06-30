@@ -18,7 +18,8 @@ export const SellForm = () => {
   const [paymentMode, setPaymentMode] = useState<Selection>(new Set([paymentOptions[0].value]))
   const [paymentError, setPaymentError] = useState(false)
   const total = cart.reduce((sum, item) => sum + item.sale_price * item.quantity, 0);
-  const troco = Math.max(0, totalPayment - total).toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+  const troco = totalPayment >= total ? Math.max(0, totalPayment - total).toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : "0,00";
+
   useEffect(() => {
     setTotalPayment(cart.reduce((sum, item) => sum + item.sale_price * item.quantity, 0));
   }, [cart])

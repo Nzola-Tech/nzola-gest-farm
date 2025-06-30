@@ -114,6 +114,8 @@ export const SellForm = () => {
                 setPaymentError(true)
               } else {
                 setTotalPayment(value)
+                if (value >= total) setPaymentError(false)
+                
               }
             }}
             errorMessage={paymentError ? `Pagamento inválido total a pagar ${total.toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 })} Kz` : undefined}

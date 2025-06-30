@@ -18,7 +18,7 @@ export const SellForm = () => {
   const [paymentMode, setPaymentMode] = useState<Selection>(new Set([paymentOptions[0].value]))
   const [paymentError, setPaymentError] = useState(false)
   const total = cart.reduce((sum, item) => sum + item.sale_price * item.quantity, 0);
-
+  const troco = Math.max(0, totalPayment - total).toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 })
   useEffect(() => {
     setTotalPayment(cart.reduce((sum, item) => sum + item.sale_price * item.quantity, 0));
   }, [cart])
@@ -60,7 +60,7 @@ export const SellForm = () => {
           </div>
           <div className="flex justify-between items-center">
             <p>Troco</p>
-            <h2 className="text-right text-lg font-semibold text-green-400">{(totalPayment - total).toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}KZ</h2>
+            <h2 className="text-right text-lg font-semibold text-green-400">{troco}KZ</h2>
           </div>
         </div>
 
@@ -108,12 +108,14 @@ export const SellForm = () => {
               style: "currency",
               currency: "AOA",
             }}
-            value={totalPayment == 0 ? undefined : totalPayment}
+            value={totalPayment === 0 ? undefined : totalPayment}
             onValueChange={(value) => {
               if (value < 0) {
                 setPaymentError(true)
               } else {
                 setTotalPayment(value)
+                if (value >= total) setPaymentError(false)
+                
               }
             }}
             errorMessage={paymentError ? `Pagamento inválido total a pagar ${total.toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 })} Kz` : undefined}

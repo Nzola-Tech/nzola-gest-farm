@@ -60,7 +60,7 @@ export const SellForm = () => {
           </div>
           <div className="flex justify-between items-center">
             <p>Troco</p>
-            <h2 className="text-right text-lg font-semibold text-green-400">{(totalPayment - total).toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}KZ</h2>
+            <h2 className="text-right text-lg font-semibold text-green-400">{Math.max(0, totalPayment - total).toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}KZ</h2>
           </div>
         </div>
 
@@ -108,7 +108,7 @@ export const SellForm = () => {
               style: "currency",
               currency: "AOA",
             }}
-            value={totalPayment == 0 ? undefined : totalPayment}
+            value={totalPayment === 0 ? undefined : totalPayment}
             onValueChange={(value) => {
               if (value < 0) {
                 setPaymentError(true)

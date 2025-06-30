@@ -35,7 +35,6 @@ export const SellForm = () => {
     const saleId = await insertSale(db, total, payment, now);
     await insertSaleItemsAndUpdateStock(db, saleId, cart, now);
 
-    setTotalPayment(0);
     setCart([]);
     setSelectedKeys(new Set([]))
     setPaymentMode(new Set([]));
@@ -157,7 +156,6 @@ export const SellForm = () => {
               className="bg-red-600 text-white"
               endContent={<XMarkIcon className="size-5" />}
               onPress={() => {
-                setTotalPayment(0);
                 setCart([]);
                 setSelectedKeys(new Set([]))
                 setPaymentMode(new Set([]));

@@ -51,6 +51,12 @@ pub fn run() {
             );",
             kind: MigrationKind::Up,
         },
+        Migration {
+            version: 4,
+            description: "add_deleted_column_to_products",
+            sql: "ALTER TABLE products ADD COLUMN deleted BOOLEAN DEFAULT 0;",
+            kind: MigrationKind::Up,
+        },
     ];
 
     tauri::Builder::default()

@@ -1,9 +1,11 @@
 import React, { useMemo } from "react";
 import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell } from "@heroui/table";
+import { Dropdown, DropdownTrigger, DropdownMenu, DropdownItem } from "@heroui/dropdown";
 import { allProductsProps } from "@/types/products";
 import { Button } from "@heroui/button";
 import { Pagination } from "@heroui/pagination";
-import { handleDelete } from "@/database";
+import { EllipsisVerticalIcon } from '@heroicons/react/24/solid'
+import { addToast } from "@heroui/toast";
 const AllProducts: React.FC<allProductsProps & { filterValue: string }> = ({
     products,
     setEditOpen,
@@ -31,6 +33,33 @@ const AllProducts: React.FC<allProductsProps & { filterValue: string }> = ({
         return filteredProducts.slice(start, end);
     }, [page, filteredProducts])
 
+    const tryDelete = async (id: number) => {
+        if (!db) return;
+        const sales = await db.select("SELECT 1 FROM sale_items WHERE product_id = $1 LIMIT 1", [id]) as any[];
+        if (sales.length > 0) {
+            addToast({
+                title: "Não é possível excluir",
+                description: "Este produto já foi vendido e não pode ser excluído.",
+                color: "danger",
+               timeout: 12000,
+                shouldShowTimeoutProgress: true,
+            });
+            return;
+        }
+        await db.execute("DELETE FROM products WHERE id = $1", [id]);
+        if (onProductChange) onProductChange();
+    };
+
+    const deactivateProduct = async (id: number) => {
+        if (!db) return;
+        await db.execute("UPDATE products SET deleted = 1 WHERE id = $1", [id]);
+        addToast({
+            title: "Produto desativado",
+            description: "O produto foi desativado com sucesso.",
+            color: "warning",
+        });
+        if (onProductChange) onProductChange();
+    };
 
     return (
         <>
@@ -111,22 +140,47 @@ const AllProducts: React.FC<allProductsProps & { filterValue: string }> = ({
                                         <span className="text-green-600">Em Estoque</span>
                                 }
                             </TableCell>
-                            <TableCell className="flex gap-2">
-                                <Button
-                                    color="primary"
-                                    onPress={() => {
-                                        setSelectedProduct(product);
-                                        setEditOpen(true);
-                                    }}
-                                >
-                                    Editar
-                                </Button>
-                                <Button
-                                    color="danger"
-                                    onPress={() => handleDelete(product.id!,db, onProductChange)}
-                                >
-                                    Excluir
-                                </Button>
+                            <TableCell>
+                                <div className="flex justify-center">
+                                    <Dropdown>
+                                        <DropdownTrigger>
+                                            <Button isIconOnly size="sm" variant="light">
+                                                <EllipsisVerticalIcon className="text-default-600 " />
+                                            </Button>
+                                        </DropdownTrigger>
+                                        <DropdownMenu>
+                                            <DropdownItem
+                                                key="edit"
+                                                onClick={() => {
+                                                    setSelectedProduct(product);
+                                                    setEditOpen(true);
+                                                }}
+                                            >
+                                                Editar
+                                            </DropdownItem>
+                                            <DropdownItem
+                                                key="delete"
+                                                className="text-danger"
+                                                color="danger"
+                                                onClick={async () => {
+                                                    await tryDelete(product.id!);
+                                                }}
+                                            >
+                                                Excluir
+                                            </DropdownItem>
+                                            <DropdownItem
+                                                key="deactivate"
+                                                className="text-warning"
+                                                color="warning"
+                                                onClick={async () => {
+                                                    await deactivateProduct(product.id!);
+                                                }}
+                                            >
+                                                Desativar
+                                            </DropdownItem>
+                                        </DropdownMenu>
+                                    </Dropdown>
+                                </div>
                             </TableCell>
                         </TableRow>
                     ))

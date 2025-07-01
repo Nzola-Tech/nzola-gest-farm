@@ -31,6 +31,11 @@ export async function insertSaleItemsAndUpdateStock(db: any, saleId: number, car
 
 export const handleDelete = async (id: number, db: Database | null, onProductChange?: () => void) => {
     if (!db) return;
+    const sales = await db.select("SELECT 1 FROM sale_items WHERE product_id = $1 LIMIT 1", [id]) as Array<{ 1: number }>;
+    if (sales.length > 0) {
+        alert("Não é possível excluir produtos que já foram vendidos.");
+        return;
+    }
     await db.execute("DELETE FROM products WHERE id = $1", [id]);
     if (onProductChange) onProductChange();
 };

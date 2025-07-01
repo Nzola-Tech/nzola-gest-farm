@@ -9,13 +9,14 @@ import Financas from "./pages/financas";
 import BeckupSeguranca from "./pages/backup-seguranca";
 import { HeroUIProvider } from "@heroui/system";
 import { ContextProvider } from "./components/contextProvider";
-
+import {ToastProvider} from "@heroui/toast";
 
 function App() {
   const navegate = useNavigate()
   return (
     <ContextProvider>
       <HeroUIProvider navigate={navegate} useHref={useHref} >
+        <ToastProvider/>
         <Routes>
           <Route element={<Home />} path="/" />
           <Route element={<Produtos />} path="/produtos" />

@@ -3,28 +3,33 @@ import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell } from 
 import { allProductsProps } from "@/types/products";
 import { Button } from "@heroui/button";
 import { Pagination } from "@heroui/pagination";
-const AllProducts: React.FC<allProductsProps> = ({
+import { handleDelete } from "@/database";
+const AllProducts: React.FC<allProductsProps & { filterValue: string }> = ({
     products,
     setEditOpen,
     setSelectedProduct,
     db,
     onProductChange,
+    filterValue
 }) => {
 
     const [page, setPage] = React.useState(1);
     const rowsPerPage = 9;
     const pages = Math.ceil(products.length / rowsPerPage);
+
+    const filteredProducts = useMemo(() => {
+        if (!filterValue) return products;
+        return products.filter((product) =>
+            product.name.toLowerCase().includes(filterValue.toLowerCase())
+        );
+    }, [products, filterValue]);
+
     const items = useMemo(() => {
         const start = (page - 1) * rowsPerPage;
         const end = start + rowsPerPage;
 
-        return products.slice(start, end);
-    }, [page, products])
-    const handleDelete = async (id: number) => {
-        if (!db) return;
-        await db.execute("DELETE FROM products WHERE id = $1", [id]);
-        if (onProductChange) onProductChange();
-    };
+        return filteredProducts.slice(start, end);
+    }, [page, filteredProducts])
 
 
     return (
@@ -86,7 +91,11 @@ const AllProducts: React.FC<allProductsProps> = ({
                                 })()}
                             </TableCell>
                             <TableCell>{product.pharmaceutical_form || "N/A"}</TableCell>
-                            <TableCell>{product.description}</TableCell>
+                            <TableCell>
+                                {product.description && product.description.length > 15
+                                    ? product.description.slice(0, 15) + "..."
+                                    : product.description}
+                            </TableCell>
                             <TableCell>
                                 {
                                     product.stock_quantity <= 10 ?
@@ -114,7 +123,7 @@ const AllProducts: React.FC<allProductsProps> = ({
                                 </Button>
                                 <Button
                                     color="danger"
-                                    onPress={() => handleDelete(product.id!)}
+                                    onPress={() => handleDelete(product.id!,db, onProductChange)}
                                 >
                                     Excluir
                                 </Button>

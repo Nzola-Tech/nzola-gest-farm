@@ -186,6 +186,16 @@ export default function ProductsTable() {
             topContentPlacement="outside"
             onSelectionChange={handleSelectionChange}
             onSortChange={setSortDescriptor}
+            disabledKeys={products
+                .filter(p => {
+                    const expDate = new Date(p.expiration_date);
+                    const now = new Date();
+                    const diffTime = expDate.getTime() - now.getTime();
+                    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                    return p.stock_quantity <= 0 || (diffDays <= 30 && diffDays > 0);
+                })
+                .map(p => String(p.id))
+            }
         >
             <TableHeader>
                 <TableColumn key="name" allowsSorting>Nome</TableColumn>
@@ -207,12 +217,20 @@ export default function ProductsTable() {
                                 const now = new Date();
                                 const diffTime = expDate.getTime() - now.getTime();
                                 const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                                if (product.stock_quantity <= 0) {
+                                    // Sempre desabilitado, independente do prazo
+                                    return (
+                                        <span className="text-default-400">{expDate.toLocaleDateString()}</span>
+                                    );
+                                }
                                 if (diffDays <= 30 && diffDays > 0) {
                                     return (
                                         <span className="text-red-600">{diffDays} dias restantes</span>
                                     );
                                 }
-                                return <span className="text-green-600">{expDate.toLocaleDateString()}</span>;
+                                return (
+                                    <span className="text-green-600">{expDate.toLocaleDateString()}</span>
+                                );
                             })()}
                         </TableCell>
                         <TableCell>

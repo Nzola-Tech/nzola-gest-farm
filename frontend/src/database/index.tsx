@@ -29,6 +29,12 @@ export async function insertSaleItemsAndUpdateStock(db: any, saleId: number, car
     }
 }
 
+export const handleDelete = async (id: number, db: Database | null, onProductChange?: () => void) => {
+    if (!db) return;
+    await db.execute("DELETE FROM products WHERE id = $1", [id]);
+    if (onProductChange) onProductChange();
+};
+
 export const handleSubmit = async (
     e: React.FormEvent<HTMLFormElement>,
     db: Database | null,

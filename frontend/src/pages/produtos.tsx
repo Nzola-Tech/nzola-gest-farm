@@ -14,23 +14,31 @@ import EditProduct from "@/components/products/editProduct";
 import AllProducts from "@/components/products/allProducts";
 import InventoryModal from "@/components/products/inventoryModal";
 import { DbContext } from "@/context/db";
+import { SearchInput } from "@/components/products/searchInput";
 
 export default function Produtos() {
   const [product, setProduct] = useState<Product>(initialState);
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
-  const {db,products,refreshProducts} = useContext(DbContext)
+  const { db, products, refreshProducts } = useContext(DbContext)
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [editOpen, setEditOpen] = useState(false);
   const [inventoryOpen, setInventoryOpen] = useState(false);
+  const [filterValue, setFilterValue] = useState("");
 
   return (
     <>
       <DefaultLayout>
-        <div className="flex flex-row-reverse gap-4">
-          <Button variant="solid" color="primary" onPress={onOpen}>Adicionar Produto</Button>
-          <Button color="primary" onPress={() => setInventoryOpen(true)}>
-            Inventário Diário
-          </Button>
+        <div className="flex w-full justify-between">
+          <SearchInput
+            filterValue={filterValue}
+            setFilterValue={setFilterValue}
+          />
+          <div className="flex flex-row-reverse gap-4">
+            <Button variant="solid" color="primary" onPress={onOpen}>Adicionar Produto</Button>
+            <Button color="primary" onPress={() => setInventoryOpen(true)}>
+              Inventário Diário
+            </Button>
+          </div>
         </div>
 
         <AllProducts
@@ -40,6 +48,7 @@ export default function Produtos() {
           db={db}
           onProductChange={refreshProducts}
           onOpenInventory={() => setInventoryOpen(true)}
+          filterValue={filterValue}
         />
         <InventoryModal
           open={inventoryOpen}

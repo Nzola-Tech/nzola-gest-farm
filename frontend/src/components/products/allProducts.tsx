@@ -39,7 +39,7 @@ const AllProducts: React.FC<allProductsProps & { filterValue: string }> = ({
         if (sales.length > 0) {
             addToast({
                 title: "Não é possível excluir",
-                description: "Este produto já foi vendido e não pode ser excluído.",
+                description: "Este produto já foi vendido e não pode ser excluído. Você pode desativá-lo.",
                 color: "danger",
                timeout: 12000,
                 shouldShowTimeoutProgress: true,
@@ -57,6 +57,17 @@ const AllProducts: React.FC<allProductsProps & { filterValue: string }> = ({
             title: "Produto desativado",
             description: "O produto foi desativado com sucesso.",
             color: "warning",
+        });
+        if (onProductChange) onProductChange();
+    };
+
+    const activateProduct = async (id: number) => {
+        if (!db) return;
+        await db.execute("UPDATE products SET deleted = 0 WHERE id = $1", [id]);
+        addToast({
+            title: "Produto ativado",
+            description: "O produto foi ativado com sucesso.",
+            color: "success",
         });
         if (onProductChange) onProductChange();
     };
@@ -177,6 +188,16 @@ const AllProducts: React.FC<allProductsProps & { filterValue: string }> = ({
                                                 }}
                                             >
                                                 Desativar
+                                            </DropdownItem>
+                                            <DropdownItem
+                                                key="activate"
+                                                className="text-success"
+                                                color="warning"
+                                                onClick={async () => {
+                                                    await activateProduct(product.id!);
+                                                }}
+                                            >
+                                                Activar
                                             </DropdownItem>
                                         </DropdownMenu>
                                     </Dropdown>

@@ -18,7 +18,7 @@ export interface Product {
   pharmaceutical_form?: string;
   created_at: string; // ISO format: 'YYYY-MM-DDTHH:mm:ssZ'
   updated_at: string; // ISO format
-  deleted: boolean;
+  deleted: number;
 }
 
 export const initialState: Product = {
@@ -36,7 +36,7 @@ export const initialState: Product = {
   pharmaceutical_form: "",
   created_at: new Date().toISOString(),
   updated_at: new Date().toISOString(),
-  deleted: false
+  deleted: 0
 };
 
 export interface AddProductProps {

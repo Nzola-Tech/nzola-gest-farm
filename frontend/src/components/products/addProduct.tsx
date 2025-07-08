@@ -2,7 +2,6 @@ import React from "react";
 import { Input } from "@heroui/input";
 import { Textarea } from "@heroui/input";
 import { Button } from "@heroui/button";
-import { Switch } from "@heroui/switch";
 import { Form } from "@heroui/form";
 import { initialState, Product } from "@/types/products";
 import { AddProductProps } from "@/types/products";
@@ -28,13 +27,6 @@ const AddProduct: React.FC<AddProductProps> = ({
     }));
   };
 
-  const handleSwitch = (name: keyof Product, checked: boolean) => {
-    setProduct((prev) => ({
-      ...prev,
-      [name]: checked,
-    }));
-  };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!db) return;
@@ -43,35 +35,31 @@ const AddProduct: React.FC<AddProductProps> = ({
       id: undefined, // Assuming ID is auto-generated
       name: formData.name as string,
       description: formData.description as string,
-      manufacturer: formData.manufacturer as string,
       expiration_date: formData.expiration_date as string,
       stock_quantity: Number(formData.stock_quantity),
       sale_price: Number(formData.sale_price),
       cost_price: Number(formData.cost_price),
-      controlled: formData.controlled === "on",
-      prescription_required: formData.prescription_required === "on",
       category: formData.category as string,
-      pharmaceutical_form: formData.pharmaceutical_form as string,
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
+      deleted: 0
     }
     await db.execute(
-      `INSERT INTO products (name, description, manufacturer, expiration_date, stock_quantity, sale_price, cost_price, controlled, prescription_required, category, pharmaceutical_form, created_at, updated_at) 
-       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)`,
+      `INSERT INTO products (name, description, expiration_date, stock_quantity, sale_price, cost_price, category, created_at, updated_at, deleted) 
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)`,
       [
         product.name,
         product.description,
-        product.manufacturer,
+        product.expiration_date,
+        product.stock_quantity,
         product.expiration_date,
         product.stock_quantity,
         product.sale_price,
         product.cost_price,
-        product.controlled,
-        product.prescription_required,
         product.category,
-        product.pharmaceutical_form,
         product.created_at,
         product.updated_at,
+        product.deleted
       ]
     );
     setProduct(initialState);
@@ -105,16 +93,6 @@ const AddProduct: React.FC<AddProductProps> = ({
             onChange={handleChange}
             required
             className="min-h-[80px]"
-          />
-        </div>
-        <div>
-          <label htmlFor="manufacturer" className="font-semibold block mb-1">Fabricante:</label>
-          <Input
-            id="manufacturer"
-            name="manufacturer"
-            value={product.manufacturer}
-            onChange={handleChange}
-            required
           />
         </div>
         <div>
@@ -154,52 +132,12 @@ const AddProduct: React.FC<AddProductProps> = ({
           />
         </div>
         <div>
-          <label htmlFor="cost_price" className="font-semibold block mb-1">Preço de Custo (KZ):</label>
-          <Input
-            id="cost_price"
-            type="number"
-            name="cost_price"
-            value={product.cost_price.toString()}
-            onChange={handleChange}
-            step="0.01"
-            min={0}
-            required
-          />
-        </div>
-        <div className="flex items-center gap-4">
-          <label htmlFor="controlled" className="font-semibold">Controlado</label>
-          <Switch
-            id="controlled"
-            checked={product.controlled}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleSwitch("controlled", e.target.checked)}
-          />
-        </div>
-        <div className="flex items-center gap-4">
-          <label htmlFor="prescription_required" className="font-semibold">Prescrição Obrigatória</label>
-          <Switch
-            id="prescription_required"
-            checked={product.prescription_required}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleSwitch("prescription_required", e.target.checked)}
-          />
-        </div>
-        <div>
           <label htmlFor="category" className="font-semibold block mb-1">Categoria:</label>
           <Input
             id="category"
             name="category"
             value={product.category}
             onChange={handleChange}
-            required
-          />
-        </div>
-        <div>
-          <label htmlFor="pharmaceutical_form" className="font-semibold block mb-1">Forma Farmacêutica:</label>
-          <Input
-            id="pharmaceutical_form"
-            name="pharmaceutical_form"
-            value={product.pharmaceutical_form}
-            onChange={handleChange}
-            required
           />
         </div>
         <div className="md:col-span-2 flex justify-center mt-8">

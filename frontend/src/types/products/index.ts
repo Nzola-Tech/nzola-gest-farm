@@ -7,15 +7,11 @@ export interface Product {
   name: string;
   barcode?: string; 
   description: string;
-  manufacturer: string;
   expiration_date: string; // ISO format: 'YYYY-MM-DD'
   stock_quantity: number;
   sale_price: number;
-  cost_price: number;
-  controlled?: boolean;
-  prescription_required: boolean;
+  cost_price?: number;
   category: string;
-  pharmaceutical_form?: string;
   created_at: string; // ISO format: 'YYYY-MM-DDTHH:mm:ssZ'
   updated_at: string; // ISO format
   deleted: number;
@@ -25,15 +21,11 @@ export const initialState: Product = {
   name: "",
   barcode: "",
   description: "",
-  manufacturer: "",
   expiration_date: "",
   stock_quantity: 0,
   sale_price: 0,
   cost_price: 0,
-  controlled: false,
-  prescription_required: false,
   category: "",
-  pharmaceutical_form: "",
   created_at: new Date().toISOString(),
   updated_at: new Date().toISOString(),
   deleted: 0

@@ -1,5 +1,5 @@
 import React, { useMemo } from "react";
-import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell } from "@heroui/table";
+import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Selection } from "@heroui/table";
 import { Dropdown, DropdownTrigger, DropdownMenu, DropdownItem } from "@heroui/dropdown";
 import { allProductsProps } from "@/types/products";
 import { Button } from "@heroui/button";
@@ -41,7 +41,7 @@ const AllProducts: React.FC<allProductsProps & { filterValue: string }> = ({
                 title: "Não é possível excluir",
                 description: "Este produto já foi vendido e não pode ser excluído. Você pode desativá-lo.",
                 color: "danger",
-               timeout: 12000,
+                timeout: 12000,
                 shouldShowTimeoutProgress: true,
             });
             return;
@@ -57,6 +57,8 @@ const AllProducts: React.FC<allProductsProps & { filterValue: string }> = ({
             title: "Produto desativado",
             description: "O produto foi desativado com sucesso.",
             color: "warning",
+            timeout: 12000,
+            shouldShowTimeoutProgress: true,
         });
         if (onProductChange) onProductChange();
     };
@@ -68,9 +70,14 @@ const AllProducts: React.FC<allProductsProps & { filterValue: string }> = ({
             title: "Produto ativado",
             description: "O produto foi ativado com sucesso.",
             color: "success",
+            timeout: 12000,
+            shouldShowTimeoutProgress: true,
         });
         if (onProductChange) onProductChange();
     };
+
+    //Todo produto que tiver a propriedade deleted com 1 deve ser marcado como uma linha desativada
+
 
     return (
         <>
@@ -91,19 +98,20 @@ const AllProducts: React.FC<allProductsProps & { filterValue: string }> = ({
                         />
                     </div>
                 }
+                disabledKeys={products
+                    .filter(p => p.deleted && p.id !== undefined)
+                    .map(p => p.id!.toString())}
             >
                 <TableHeader>
                     <TableColumn>Id</TableColumn>
                     <TableColumn>Nome</TableColumn>
                     <TableColumn>Categoria</TableColumn>
-                    <TableColumn>Fabricante</TableColumn>
                     <TableColumn>Preço de Venda</TableColumn>
-                    <TableColumn>Preço de Custo</TableColumn>
                     <TableColumn>Data de Validade</TableColumn>
-                    <TableColumn>Forma Farmacêutica</TableColumn>
                     <TableColumn>Descrição</TableColumn>
                     <TableColumn>Estoque</TableColumn>
                     <TableColumn>Validade</TableColumn>
+                    <TableColumn>Estado</TableColumn>
                     <TableColumn>Alertas</TableColumn>
                     <TableColumn>Actions</TableColumn>
                 </TableHeader>
@@ -113,9 +121,7 @@ const AllProducts: React.FC<allProductsProps & { filterValue: string }> = ({
                             <TableCell>{product.id}</TableCell>
                             <TableCell>{product.name}</TableCell>
                             <TableCell>{product.category}</TableCell>
-                            <TableCell>{product.manufacturer}</TableCell>
                             <TableCell>{product.sale_price.toFixed(2)}</TableCell>
-                            <TableCell>{product.cost_price.toFixed(2)}</TableCell>
                             <TableCell>
                                 {(() => {
                                     const expDate = new Date(product.expiration_date);
@@ -130,12 +136,13 @@ const AllProducts: React.FC<allProductsProps & { filterValue: string }> = ({
                                     return <span className="text-green-600">{expDate.toLocaleDateString()}</span>;
                                 })()}
                             </TableCell>
-                            <TableCell>{product.pharmaceutical_form || "N/A"}</TableCell>
+
                             <TableCell>
                                 {product.description && product.description.length > 15
                                     ? product.description.slice(0, 15) + "..."
                                     : product.description}
                             </TableCell>
+
                             <TableCell>
                                 {
                                     product.stock_quantity <= 10 ?
@@ -144,10 +151,16 @@ const AllProducts: React.FC<allProductsProps & { filterValue: string }> = ({
                                 }
                             </TableCell>
                             <TableCell>{new Date(product.created_at).toLocaleDateString()}</TableCell>
+                            <TableCell>{
+                                product.deleted ?
+                                    <span className="text-red-600">Desativado</span>
+                                    :
+                                    <span className="text-green-600">Ativo</span>
+                            }</TableCell>
                             <TableCell className="text-center">
                                 {
                                     product.stock_quantity <= 10 ?
-                                        <span className="text-red-600">Baixo Estoque</span> :
+                                        <span className="text-red-600 block">Baixo Estoque</span> :
                                         <span className="text-green-600">Em Estoque</span>
                                 }
                             </TableCell>

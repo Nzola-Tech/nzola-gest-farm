@@ -82,6 +82,7 @@ const AddProduct: React.FC<AddProductProps> = ({
             value={product.name}
             onChange={handleChange}
             required
+            errorMessage="O nome do produto é obrigatório."
           />
         </div>
         <div>
@@ -91,7 +92,6 @@ const AddProduct: React.FC<AddProductProps> = ({
             name="description"
             value={product.description}
             onChange={handleChange}
-            required
             className="min-h-[80px]"
           />
         </div>
@@ -104,6 +104,7 @@ const AddProduct: React.FC<AddProductProps> = ({
             value={product.expiration_date}
             onChange={handleChange}
             required
+            errorMessage="A data de validade é obrigatória."
           />
         </div>
         <div>
@@ -114,8 +115,9 @@ const AddProduct: React.FC<AddProductProps> = ({
             name="stock_quantity"
             value={product.stock_quantity.toString()}
             onChange={handleChange}
-            min={0}
+            min={1}
             required
+            errorMessage="A quantidade em estoque é obrigatória."
           />
         </div>
         <div>
@@ -127,8 +129,9 @@ const AddProduct: React.FC<AddProductProps> = ({
             value={product.sale_price.toString()}
             onChange={handleChange}
             step="0.01"
-            min={0}
+            min={1}
             required
+            errorMessage="O preço de venda é obrigatório."
           />
         </div>
         <div>

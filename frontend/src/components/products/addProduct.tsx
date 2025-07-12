@@ -38,24 +38,20 @@ const AddProduct: React.FC<AddProductProps> = ({
       expiration_date: formData.expiration_date as string,
       stock_quantity: Number(formData.stock_quantity),
       sale_price: Number(formData.sale_price),
-      cost_price: Number(formData.cost_price),
       category: formData.category as string,
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
       deleted: 0
     }
     await db.execute(
-      `INSERT INTO products (name, description, expiration_date, stock_quantity, sale_price, cost_price, category, created_at, updated_at, deleted) 
-       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)`,
+      `INSERT INTO products (name, description, expiration_date, stock_quantity, sale_price, category, created_at, updated_at, deleted) 
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)`,
       [
         product.name,
         product.description,
         product.expiration_date,
         product.stock_quantity,
-        product.expiration_date,
-        product.stock_quantity,
         product.sale_price,
-        product.cost_price,
         product.category,
         product.created_at,
         product.updated_at,
@@ -115,8 +111,8 @@ const AddProduct: React.FC<AddProductProps> = ({
             name="stock_quantity"
             value={product.stock_quantity.toString()}
             onChange={handleChange}
-            min={1}
             required
+            min={1}
             errorMessage="A quantidade em estoque é obrigatória."
           />
         </div>

@@ -10,7 +10,6 @@ export interface Product {
   expiration_date: string; // ISO format: 'YYYY-MM-DD'
   stock_quantity: number;
   sale_price: number;
-  cost_price?: number;
   category: string;
   created_at: string; // ISO format: 'YYYY-MM-DDTHH:mm:ssZ'
   updated_at: string; // ISO format
@@ -24,7 +23,6 @@ export const initialState: Product = {
   expiration_date: "",
   stock_quantity: 0,
   sale_price: 0,
-  cost_price: 0,
   category: "",
   created_at: new Date().toISOString(),
   updated_at: new Date().toISOString(),

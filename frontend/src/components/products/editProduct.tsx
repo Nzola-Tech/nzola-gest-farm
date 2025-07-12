@@ -24,17 +24,16 @@ const EditProduct: React.FC<EditProductProps> = ({ product, setProduct, db, onCl
         if (!db) return;
         await db.execute(
             `UPDATE products SET 
-        name = $1, description = $2, manufacturer = $3, expiration_date = $4, 
-        stock_quantity = $5, sale_price = $6, cost_price = $7, controlled = $8, 
-        prescription_required = $9, category = $10, pharmaceutical_form = $11, updated_at = $12
-        WHERE id = $13`,
+        name = $1, description = $2, expiration_date = $3, 
+        stock_quantity = $4, sale_price = $5, 
+        category = $6, updated_at = $7
+        WHERE id = $8`,
             [
                 product.name,
                 product.description,
                 product.expiration_date,
                 product.stock_quantity,
                 product.sale_price,
-                product.cost_price,
                 product.category,
                 new Date().toISOString(),
                 product.id,
@@ -57,6 +56,7 @@ const EditProduct: React.FC<EditProductProps> = ({ product, setProduct, db, onCl
                     value={product.name}
                     onChange={handleChange}
                     required
+                    errorMessage="O nome do produto é obrigatório."
                 />
             </div>
             <div>
@@ -66,7 +66,6 @@ const EditProduct: React.FC<EditProductProps> = ({ product, setProduct, db, onCl
                     name="description"
                     value={product.description}
                     onChange={handleChange}
-                    required
                     className="min-h-[80px]"
                 />
             </div>
@@ -80,6 +79,7 @@ const EditProduct: React.FC<EditProductProps> = ({ product, setProduct, db, onCl
                     value={product.expiration_date}
                     onChange={handleChange}
                     required
+                    errorMessage="A data de validade é obrigatória."
                 />
             </div>
             <div>
@@ -90,8 +90,9 @@ const EditProduct: React.FC<EditProductProps> = ({ product, setProduct, db, onCl
                     name="stock_quantity"
                     value={product.stock_quantity.toString()}
                     onChange={handleChange}
-                    min={0}
                     required
+                    min={1}
+                    errorMessage="A quantidade em estoque é obrigatória."
                 />
             </div>
             <div>
@@ -103,11 +104,12 @@ const EditProduct: React.FC<EditProductProps> = ({ product, setProduct, db, onCl
                     value={product.sale_price.toString()}
                     onChange={handleChange}
                     step="0.01"
-                    min={0}
+                    min={1}
                     required
+                    errorMessage="O preço de venda é obrigatório."
                 />
             </div>
-            
+
             <div>
                 <label htmlFor="category" className="font-semibold block mb-1">Categoria:</label>
                 <Input

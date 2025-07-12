@@ -76,9 +76,6 @@ const AllProducts: React.FC<allProductsProps & { filterValue: string }> = ({
         if (onProductChange) onProductChange();
     };
 
-    //Todo produto que tiver a propriedade deleted com 1 deve ser marcado como uma linha desativada
-
-
     return (
         <>
             <Table
@@ -99,7 +96,7 @@ const AllProducts: React.FC<allProductsProps & { filterValue: string }> = ({
                     </div>
                 }
                 disabledKeys={products
-                    .filter(p => p.deleted && p.id !== undefined)
+                    .filter(p => p.deleted && p.id !== undefined  || p.stock_quantity === 0 || p.expiration_date === "Produto expirado")
                     .map(p => p.id!.toString())}
             >
                 <TableHeader>
@@ -110,115 +107,123 @@ const AllProducts: React.FC<allProductsProps & { filterValue: string }> = ({
                     <TableColumn>Data de Validade</TableColumn>
                     <TableColumn>Descrição</TableColumn>
                     <TableColumn>Estoque</TableColumn>
-                    <TableColumn>Validade</TableColumn>
                     <TableColumn>Estado</TableColumn>
                     <TableColumn>Alertas</TableColumn>
                     <TableColumn>Actions</TableColumn>
                 </TableHeader>
-                <TableBody emptyContent={"No rows to display."} items={items}>{
-                    items.map((product) => (
-                        <TableRow key={product.id}>
-                            <TableCell>{product.id}</TableCell>
-                            <TableCell>{product.name}</TableCell>
-                            <TableCell>{product.category}</TableCell>
-                            <TableCell>{product.sale_price.toFixed(2)}</TableCell>
-                            <TableCell>
-                                {(() => {
-                                    const expDate = new Date(product.expiration_date);
-                                    const now = new Date();
-                                    const diffTime = expDate.getTime() - now.getTime();
-                                    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-                                    if (diffDays <= 30 && diffDays > 0) {
-                                        return (
-                                            <span className="text-red-600">{diffDays} dias restantes</span>
-                                        );
-                                    }
-                                    return <span className="text-green-600">{expDate.toLocaleDateString()}</span>;
-                                })()}
-                            </TableCell>
+                <TableBody emptyContent={"Adicione Produtos para o sistema"} items={items}>
+                    {
+                        items.map((product) => {
+                            console.log(product)
+                            return (
+                                <TableRow key={product.id}>
+                                    <TableCell>{product.id}</TableCell>
+                                    <TableCell>{product.name}</TableCell>
+                                    <TableCell>{product.category}</TableCell>
+                                    <TableCell>{
+                                        isNaN(Number(product.sale_price))
+                                            ? "N/A"
+                                            : Number(product.sale_price).toFixed(2)}
+                                    </TableCell>
+                                    <TableCell>
+                                        {(() => {
+                                            const expDate = new Date(product.expiration_date);
+                                            const now = new Date();
+                                            const diffTime = expDate.getTime() - now.getTime();
+                                            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                                            if (diffDays <= 30 && diffDays <= 0) {
+                                                return (
+                                                    <span className="text-red-600">Produto expirado</span>
+                                                );
+                                            }
+                                            return <span className="text-green-600">{expDate.toLocaleDateString()}</span>;
+                                        })()}
+                                    </TableCell>
 
-                            <TableCell>
-                                {product.description && product.description.length > 15
-                                    ? product.description.slice(0, 15) + "..."
-                                    : product.description}
-                            </TableCell>
+                                    <TableCell>
+                                        {product.description && product.description.length > 15
+                                            ? product.description.slice(0, 15) + "..."
+                                            : product.description}
+                                    </TableCell>
 
-                            <TableCell>
-                                {
-                                    product.stock_quantity <= 10 ?
-                                        <span className="text-red-600">{product.stock_quantity}</span> :
-                                        <span className="text-green-600">{product.stock_quantity}</span>
-                                }
-                            </TableCell>
-                            <TableCell>{new Date(product.created_at).toLocaleDateString()}</TableCell>
-                            <TableCell>{
-                                product.deleted ?
-                                    <span className="text-red-600">Desativado</span>
-                                    :
-                                    <span className="text-green-600">Ativo</span>
-                            }</TableCell>
-                            <TableCell className="text-center">
-                                {
-                                    product.stock_quantity <= 10 ?
-                                        <span className="text-red-600 block">Baixo Estoque</span> :
-                                        <span className="text-green-600">Em Estoque</span>
-                                }
-                            </TableCell>
-                            <TableCell>
-                                <div className="flex justify-center">
-                                    <Dropdown>
-                                        <DropdownTrigger>
-                                            <Button isIconOnly size="sm" variant="light">
-                                                <EllipsisVerticalIcon className="text-default-600 " />
-                                            </Button>
-                                        </DropdownTrigger>
-                                        <DropdownMenu>
-                                            <DropdownItem
-                                                key="edit"
-                                                onClick={() => {
-                                                    setSelectedProduct(product);
-                                                    setEditOpen(true);
-                                                }}
-                                            >
-                                                Editar
-                                            </DropdownItem>
-                                            <DropdownItem
-                                                key="delete"
-                                                className="text-danger"
-                                                color="danger"
-                                                onClick={async () => {
-                                                    await tryDelete(product.id!);
-                                                }}
-                                            >
-                                                Excluir
-                                            </DropdownItem>
-                                            <DropdownItem
-                                                key="deactivate"
-                                                className="text-warning"
-                                                color="warning"
-                                                onClick={async () => {
-                                                    await deactivateProduct(product.id!);
-                                                }}
-                                            >
-                                                Desativar
-                                            </DropdownItem>
-                                            <DropdownItem
-                                                key="activate"
-                                                className="text-success"
-                                                color="warning"
-                                                onClick={async () => {
-                                                    await activateProduct(product.id!);
-                                                }}
-                                            >
-                                                Activar
-                                            </DropdownItem>
-                                        </DropdownMenu>
-                                    </Dropdown>
-                                </div>
-                            </TableCell>
-                        </TableRow>
-                    ))
-                }</TableBody>
+                                    <TableCell>
+                                        {
+                                            product.stock_quantity <= 10 ?
+                                                <span className="text-red-600">{product.stock_quantity}</span> :
+                                                <span className="text-green-600">{product.stock_quantity}</span>
+                                        }
+                                    </TableCell>
+                                    
+                                    <TableCell>{
+                                        product.deleted ?
+                                            <span className="text-red-600">Desativado</span>
+                                            :
+                                            <span className="text-green-600">Ativo</span>
+                                    }</TableCell>
+                                    <TableCell className="text-center">
+                                        {
+                                            product.stock_quantity <= 10 ?
+                                                <span className="text-red-600 block">Baixo Estoque</span> :
+                                                <span className="text-green-600">Em Estoque</span>
+                                        }
+                                    </TableCell>
+                                    <TableCell>
+                                        <div className="flex justify-center">
+                                            <Dropdown>
+                                                <DropdownTrigger>
+                                                    <Button isIconOnly size="sm" variant="light">
+                                                        <EllipsisVerticalIcon className="text-default-600 " />
+                                                    </Button>
+                                                </DropdownTrigger>
+                                                <DropdownMenu>
+                                                    <DropdownItem
+                                                        key="edit"
+                                                        onClick={() => {
+                                                            setSelectedProduct(product);
+                                                            setEditOpen(true);
+                                                        }}
+                                                    >
+                                                        Editar
+                                                    </DropdownItem>
+                                                    <DropdownItem
+                                                        key="delete"
+                                                        className="text-danger"
+                                                        color="danger"
+                                                        onClick={async () => {
+                                                            await tryDelete(product.id!);
+                                                        }}
+                                                    >
+                                                        Excluir
+                                                    </DropdownItem>
+                                                    <DropdownItem
+                                                        key="deactivate"
+                                                        className="text-warning"
+                                                        color="warning"
+                                                        onClick={async () => {
+                                                            await deactivateProduct(product.id!);
+                                                        }}
+                                                    >
+                                                        Desativar
+                                                    </DropdownItem>
+                                                    <DropdownItem
+                                                        key="activate"
+                                                        className="text-success"
+                                                        color="warning"
+                                                        onClick={async () => {
+                                                            await activateProduct(product.id!);
+                                                        }}
+                                                    >
+                                                        Activar
+                                                    </DropdownItem>
+                                                </DropdownMenu>
+                                            </Dropdown>
+                                        </div>
+                                    </TableCell>
+                                </TableRow>
+                            )
+                        })
+                    }
+                </TableBody>
             </Table>
         </>
     );

@@ -60,10 +60,22 @@ export default function ProductsTable() {
 
     // Filtro por nome
     const filteredProducts = useMemo(() => {
-        if (!filterValue) return products;
-        return products.filter((product) =>
-            product.name.toLowerCase().includes(filterValue.toLowerCase())
-        );
+        return products
+            .filter(p => {
+                const expDate = new Date(p.expiration_date);
+                const now = new Date();
+                const diffTime = expDate.getTime() - now.getTime();
+                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+                const isDeleted = p.deleted === 1;
+                const isOutOfStock = p.stock_quantity <= 0;
+                const isExpired = diffDays <= 0;
+
+                return !isDeleted && !isOutOfStock && !isExpired;
+            })
+            .filter(product =>
+                product.name.toLowerCase().includes(filterValue.toLowerCase())
+            );
     }, [products, filterValue]);
 
     // Paginação
@@ -192,7 +204,7 @@ export default function ProductsTable() {
                     const now = new Date();
                     const diffTime = expDate.getTime() - now.getTime();
                     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-                    return p.stock_quantity <= 0 || (diffDays <= 30 && diffDays > 0);
+                    return p.stock_quantity <= 0 || (diffDays <= 0 && diffDays >= 0) || p.deleted === 1;
                 })
                 .map(p => String(p.id))
             }

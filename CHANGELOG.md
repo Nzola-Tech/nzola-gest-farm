@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.4.1](https://github.com/Nzola-Tech/nzola-gest-farm/compare/v0.4.0...v0.4.1) (2025-07-16)
+
+
+### Bug Fixes
+
+* fullscreen ([1d4b584](https://github.com/Nzola-Tech/nzola-gest-farm/commit/1d4b5842d735b4cf5993f3c5f63c6a9c930f0d6b))
+
 ## [0.4.0](https://github.com/Nzola-Tech/nzola-gest-farm/compare/v0.3.0...v0.4.0) (2025-07-16)
 
 

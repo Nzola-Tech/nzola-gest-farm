@@ -13,11 +13,7 @@
     "windows": [
       {
         "title": "Nzola Gest Farmácia",
-        "width": 1000,
-        "height": 600,
-        "center": true,
-        "decorations": true,
-        "resizable": true,
+        "decorations": false,
         "fullscreen": true
       }
     ],

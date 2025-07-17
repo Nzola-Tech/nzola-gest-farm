@@ -1,8 +1,6 @@
 import { Tabs, Tab } from "@heroui/tabs";
 import { useLocation } from "react-router-dom";
 
-import { ThemeSwitch } from "../theme-switch";
-
 import { siteConfig } from "@/config/site";
 
 const tabs = siteConfig.navItems.map((item) => ({
@@ -39,9 +37,6 @@ export default function NavBar() {
             </Tab>
           ))}
         </Tabs>
-        <div className="absolute top-4 right-10">
-          <ThemeSwitch />
-        </div>
       </div>
     </div>
   );

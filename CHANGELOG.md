@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.4.3](https://github.com/Nzola-Tech/nzola-gest-farm/compare/v0.4.2...v0.4.3) (2025-07-17)
+
+
+### Bug Fixes
+
+* add release type ([86cee6a](https://github.com/Nzola-Tech/nzola-gest-farm/commit/86cee6ac79b1d5aaab2af178db6359341f98c78b))
+* add release type ([9b9d284](https://github.com/Nzola-Tech/nzola-gest-farm/commit/9b9d284872d971a9e71a9bf5fdb7259afd38d643))
+
 ## [0.4.2](https://github.com/Nzola-Tech/nzola-gest-farm/compare/v0.4.1...v0.4.2) (2025-07-16)
 
 

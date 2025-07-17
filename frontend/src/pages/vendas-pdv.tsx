@@ -3,10 +3,10 @@ import DefaultLayout from "@/layouts/default";
 
 export default function VendasPdv() {
   return (
-  <>  
-    <DefaultLayout>
-      <PDV/> 
-    </DefaultLayout>
-  </>
+    <>
+      <DefaultLayout>
+        <PDV />
+      </DefaultLayout>
+    </>
   );
 }

@@ -7,44 +7,44 @@ export const siteConfig = {
     {
       label: "HOME",
       href: "/",
-      content: ['Dados da Empresa', 'Minha Agenda', 'Alterar Minha Senha']
+      content: ["Dados da Empresa", "Minha Agenda", "Alterar Minha Senha"],
     },
     {
       label: "VENDAS",
       href: "/vendas",
-      content: ['QUIANNI Suporte (QS)', 'Denuncie']
+      content: ["QUIANNI Suporte (QS)", "Denuncie"],
     },
     {
       label: "PRODUTOS",
       href: "/produtos",
-      content: ['Criar Produto'],
+      content: ["Criar Produto"],
       function: {
         addProd: "addProduct",
         rmProd: "rmProduct",
         del: "delProduct",
-        edit:"editProduct"
-      }
+        edit: "editProduct",
+      },
     },
     {
       label: "ESTOQUE",
       href: "/estoque",
-      content: ['Utilizadores', 'Perfil de Utilizadores']
+      content: ["Utilizadores", "Perfil de Utilizadores"],
     },
     {
       label: "FINANÇAS",
       href: "/financas",
-      content: ['Gestão de Idiomas', 'Ajuda', 'Configurações']
+      content: ["Gestão de Idiomas", "Ajuda", "Configurações"],
     },
     {
       label: "CLIENTES",
       href: "/clientes",
-      content: ['Configuração Jabakule (SMS)']
+      content: ["Configuração Jabakule (SMS)"],
     },
     {
       label: "BACKUP & SEGURANÇA",
       href: "/backup-seguranca",
-      content: ['Gestão de Idiomas', 'Ajuda', 'Configurações']
-    }
+      content: ["Gestão de Idiomas", "Ajuda", "Configurações"],
+    },
   ],
   navMenuItems: [
     {
@@ -80,7 +80,5 @@ export const siteConfig = {
       href: "/logout",
     },
   ],
-  links: {
-   
-  },
+  links: {},
 };

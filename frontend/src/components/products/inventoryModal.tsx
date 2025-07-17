@@ -1,9 +1,10 @@
 import React from "react";
 import { Modal, ModalContent, ModalHeader, ModalBody } from "@heroui/modal";
 import { Button } from "@heroui/button";
-import { Product } from "@/types/products";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
+
+import { Product } from "@/types/products";
 
 type InventoryModalProps = {
   open: boolean;
@@ -18,6 +19,7 @@ const InventoryModal: React.FC<InventoryModalProps> = ({
 }) => {
   const exportToPDF = () => {
     const doc = new jsPDF();
+
     doc.text("Inventário Diário de Produtos", 14, 16);
 
     autoTable(doc, {
@@ -38,7 +40,13 @@ const InventoryModal: React.FC<InventoryModalProps> = ({
   };
 
   return (
-    <Modal isOpen={open} onOpenChange={onClose} size="5xl" backdrop="blur" scrollBehavior="inside">
+    <Modal
+      backdrop="blur"
+      isOpen={open}
+      scrollBehavior="inside"
+      size="5xl"
+      onOpenChange={onClose}
+    >
       <ModalContent>
         <ModalHeader>Inventário Diário</ModalHeader>
         <ModalBody>
@@ -59,8 +67,12 @@ const InventoryModal: React.FC<InventoryModalProps> = ({
                     <td className="p-2 border text-center">{product.id}</td>
                     <td className="p-2 border">{product.name}</td>
                     <td className="p-2 border">{product.category}</td>
-                    <td className="p-2 border text-center">{product.stock_quantity}</td>
-                    <td className="p-2 border text-center">{new Date(product.expiration_date).toLocaleDateString()}</td>
+                    <td className="p-2 border text-center">
+                      {product.stock_quantity}
+                    </td>
+                    <td className="p-2 border text-center">
+                      {new Date(product.expiration_date).toLocaleDateString()}
+                    </td>
                   </tr>
                 ))}
               </tbody>

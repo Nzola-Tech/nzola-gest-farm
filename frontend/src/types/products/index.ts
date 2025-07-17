@@ -5,7 +5,7 @@ export const MIN_STOCK = 10;
 export interface Product {
   id?: number; // Optional, since it's usually auto-generated
   name: string;
-  barcode?: string; 
+  barcode?: string;
   description: string;
   expiration_date: string; // ISO format: 'YYYY-MM-DD'
   stock_quantity: number;
@@ -26,30 +26,30 @@ export const initialState: Product = {
   category: "",
   created_at: new Date().toISOString(),
   updated_at: new Date().toISOString(),
-  deleted: 0
+  deleted: 0,
 };
 
 export interface AddProductProps {
   product: Product;
   setProduct: React.Dispatch<React.SetStateAction<Product>>;
-  db : Database | null;
+  db: Database | null;
   onProductChange?: () => void;
   onClose?: () => void;
 }
 
-export interface allProductsProps { 
-    products: Product[];
-    setEditOpen: React.Dispatch<React.SetStateAction<boolean>>;
-    setSelectedProduct: React.Dispatch<React.SetStateAction<Product | null>>;
-    db: Database | null;
-    onProductChange?: () => void;
-    onOpenInventory?: () => void;
+export interface allProductsProps {
+  products: Product[];
+  setEditOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setSelectedProduct: React.Dispatch<React.SetStateAction<Product | null>>;
+  db: Database | null;
+  onProductChange?: () => void;
+  onOpenInventory?: () => void;
 }
 
-export interface EditProductProps  {
-    product: Product;
-    setProduct: React.Dispatch<React.SetStateAction<Product>>;
-    db: any;
-    onProductChange: () => void;
-    onClose: () => void;
-};
+export interface EditProductProps {
+  product: Product;
+  setProduct: React.Dispatch<React.SetStateAction<Product>>;
+  db: any;
+  onProductChange: () => void;
+  onClose: () => void;
+}

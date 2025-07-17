@@ -10,9 +10,8 @@ export type CartItem = {
   id: number;
   name: string;
   sale_price: number;
-  quantity : number;
+  quantity: number;
 };
-
 
 export const paymentOptions = [
   { key: "dinheiro", value: "Dinheiro" },

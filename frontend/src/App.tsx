@@ -1,22 +1,24 @@
 import { Route, Routes, useHref, useNavigate } from "react-router-dom";
+import { HeroUIProvider } from "@heroui/system";
+import { ToastProvider } from "@heroui/toast";
 
-import Home from "@/pages/index";
 import Produtos from "./pages/produtos";
 import Clientes from "./pages/clientes";
 import Estoque from "./pages/estoque";
 import VendasPdv from "./pages/vendas-pdv";
 import Financas from "./pages/financas";
 import BeckupSeguranca from "./pages/backup-seguranca";
-import { HeroUIProvider } from "@heroui/system";
 import { ContextProvider } from "./components/contextProvider";
-import {ToastProvider} from "@heroui/toast";
+
+import Home from "@/pages/index";
 
 function App() {
-  const navegate = useNavigate()
+  const navegate = useNavigate();
+
   return (
     <ContextProvider>
-      <HeroUIProvider navigate={navegate} useHref={useHref} >
-        <ToastProvider/>
+      <HeroUIProvider navigate={navegate} useHref={useHref}>
+        <ToastProvider />
         <Routes>
           <Route element={<Home />} path="/" />
           <Route element={<Produtos />} path="/produtos" />

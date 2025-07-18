@@ -15,6 +15,7 @@ import { DbContext } from "@/context/db";
 import { paymentOptions } from "@/types/pdv";
 import { PdvContext } from "@/context/pdv";
 import { insertSale, insertSaleItemsAndUpdateStock } from "@/database";
+import { Product } from "./product";
 
 export const SellForm = () => {
   const {
@@ -38,9 +39,9 @@ export const SellForm = () => {
   const troco =
     totalPayment >= total
       ? Math.max(0, totalPayment - total).toLocaleString("pt-BR", {
-          minimumFractionDigits: 2,
-          maximumFractionDigits: 2,
-        })
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      })
       : "0,00";
 
   useEffect(() => {
@@ -95,34 +96,25 @@ export const SellForm = () => {
         </div>
 
         <ScrollShadow className="row-span-6 p-4 space-y-4 h-full">
-          {cart.length === 0 ? (
-            <div className="h-full w-full flex justify-center items-center gap-2">
-              <p>Sem itens adicionados ao carrinho.</p>
-              <ShoppingCartIcon className="size-6" />
+          <div>
+            <div className="flex flex-row justify-between items-center mb-2">
+              <span>Nome</span>
+              <span>Qt</span>
+              <span>Preço</span>
+              <span>Desconto</span>
+              <span>Ações</span>
             </div>
-          ) : (
-            cart.map((item) => (
-              <div key={item.id} className="flex justify-between">
-                <span>{item.name}</span>
-                <span>{item.sale_price} KZ</span>
-                <span>{item.quantity}</span>
-                <Button
-                  className="text-red-500 hover:text-red-700"
-                  type="button"
-                  onPress={() => removeFromCart(item.id)}
-                >
-                  Remover
-                </Button>
-                <Button
-                  className="text-blue-500 hover:text-blue-700"
-                  type="button"
-                  onPress={() => updateQuantity(item.id, item.quantity + 1)}
-                >
-                  Adicionar
-                </Button>
+            {cart.length === 0 ? (
+              <div className="h-full w-full flex justify-center items-center gap-4 ">
+                <p>Sem itens adicionados ao carrinho.</p>
+                <ShoppingCartIcon className="size-6" />
               </div>
-            ))
-          )}
+            ) : (
+              cart.map((item) => (
+                <Product key={item.id} item={item} />
+              ))
+            )}
+          </div>
         </ScrollShadow>
 
         <div className="flex flex-col items-end justify-end gap-2 bg-slate-100 p-4 dark:bg-zinc-800">

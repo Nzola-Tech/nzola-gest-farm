@@ -15,7 +15,7 @@ export default function NavBar() {
 
   return (
     <div className="w-full">
-      <div className="px-2 mt-2">
+      <div className="px-2 mt-2 mb-5">
         <Tabs
           aria-label="Options"
           color="primary"
@@ -29,12 +29,7 @@ export default function NavBar() {
               key={`${siteConfig.navItems[index].href}`}
               href={`${tabs[index].href}`}
               title={tab.label}
-            >
-              <div className="dark:bg-zinc-800 bg-gray-100 rounded-md">
-                {tab.content.map((item) => (
-                  <h1 key={item}>{item}</h1>
-                ))}
-              </div>
+            >  
             </Tab>
           ))}
         </Tabs>

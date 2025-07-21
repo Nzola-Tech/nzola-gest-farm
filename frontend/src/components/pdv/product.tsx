@@ -1,13 +1,13 @@
 import { PdvContext } from "@/context/pdv";
 import { CartItem } from "@/types/pdv";
 import { Button } from "@heroui/button";
-import { Dropdown, DropdownItem, DropdownMenu,DropdownTrigger } from "@heroui/dropdown";
+import { Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from "@heroui/dropdown";
 import { EllipsisVerticalIcon } from "@heroicons/react/24/solid";
 import { useContext } from "react";
 
 
 
-export const Product = ({ item }: { item: CartItem }) => {
+export const Product = ({ item,onEditQuantity }: { item: CartItem, onEditQuantity: (id: number, quantity: number) => void }) => {
     const {
         removeFromCart,
         updateQuantity,
@@ -46,6 +46,15 @@ export const Product = ({ item }: { item: CartItem }) => {
                         onPress={() => updateQuantity(item.id, item.quantity + 1)}
                     >
                         Adicionar
+                    </DropdownItem>
+                    <DropdownItem
+                        key="edit-quantity"
+                        className="text-blue-500 hover:text-blue-700"
+                        onPress={() => {
+                            onEditQuantity(item.id,item.quantity);
+                        }}
+                    >
+                        Editar Quantidade
                     </DropdownItem>
                 </DropdownMenu>
             </Dropdown>

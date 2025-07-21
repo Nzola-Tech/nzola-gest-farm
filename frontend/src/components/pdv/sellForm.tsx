@@ -17,12 +17,10 @@ import { PdvContext } from "@/context/pdv";
 import { insertSale, insertSaleItemsAndUpdateStock } from "@/database";
 import { Product } from "./product";
 
-export const SellForm = () => {
+export const SellForm = ({ onEditQuantity }:{onEditQuantity: (productId: number, quantity: number) => void}) => {
   const {
     cart,
-    removeFromCart,
     payment,
-    updateQuantity,
     setCart,
     setSelectedKeys,
   } = useContext(PdvContext);
@@ -111,7 +109,7 @@ export const SellForm = () => {
               </div>
             ) : (
               cart.map((item) => (
-                <Product key={item.id} item={item} />
+                <Product key={item.id} item={item} onEditQuantity={onEditQuantity} />
               ))
             )}
           </div>

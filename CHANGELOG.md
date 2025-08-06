@@ -1,5 +1,23 @@
 # Changelog
 
+## [0.5.0](https://github.com/Nzola-Tech/nzola-gest-farm/compare/v0.4.4...v0.5.0) (2025-08-06)
+
+
+### Features
+
+* add edit product quantity modal and integrate with sell form ([a357599](https://github.com/Nzola-Tech/nzola-gest-farm/commit/a357599d28ab86013ed6c9308cbe30060d48f4d3))
+* add menu ([0e68331](https://github.com/Nzola-Tech/nzola-gest-farm/commit/0e683319fdddfc06c9996eb7d7676d9c4dbc3798))
+* add native window control ([1f2584e](https://github.com/Nzola-Tech/nzola-gest-farm/commit/1f2584e42ba2f1de333cd29c19ac3fee80e721ba))
+* add themeswitch ([0c3074b](https://github.com/Nzola-Tech/nzola-gest-farm/commit/0c3074bad27f96d6189ac38bf9bdcd66ef50255a))
+* Add Window Customization ([d9f67b9](https://github.com/Nzola-Tech/nzola-gest-farm/commit/d9f67b974a97eedb1a83f61fc3119fcbf6ebe851))
+* implement product component for cart item display and actions ([0026f71](https://github.com/Nzola-Tech/nzola-gest-farm/commit/0026f719e201a17d2bac80eee07237ca893c62e5))
+* rm element in tab ([ccf2418](https://github.com/Nzola-Tech/nzola-gest-farm/commit/ccf241874fa39bb86293e1356d259bc4cfd2c93f))
+
+
+### Bug Fixes
+
+* run lint ([421d7d6](https://github.com/Nzola-Tech/nzola-gest-farm/commit/421d7d6913083d2e75ab479f62555d34e5d35ac3))
+
 ## [0.4.4](https://github.com/Nzola-Tech/nzola-gest-farm/compare/v0.4.3...v0.4.4) (2025-07-17)
 
 

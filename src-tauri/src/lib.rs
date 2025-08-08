@@ -60,6 +60,7 @@ pub fn run() {
                 .add_migrations("sqlite:ngf.db", migrations)
                 .build(),
         )
+        .plugin(tauri_plugin_store::Builder::default().build())
         .setup(|app| {
             if cfg!(debug_assertions) {
                 app.handle().plugin(

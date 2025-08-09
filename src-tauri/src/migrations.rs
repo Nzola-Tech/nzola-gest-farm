@@ -1,0 +1,113 @@
+use tauri_plugin_sql::{Migration, MigrationKind};
+
+pub fn get_migrations() -> Vec<Migration> {
+    vec![
+        Migration {
+            version: 1,
+            description: "create_initial_tables",
+            sql: "CREATE TABLE IF NOT EXISTS products (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                name TEXT NOT NULL,
+                description TEXT,
+                expiration_date DATE,
+                stock_quantity INTEGER DEFAULT 0,
+                sale_price REAL,
+                category TEXT,
+                created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+                updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+            );",
+            kind: MigrationKind::Up,
+        },
+        Migration {
+            version: 7,
+            description: "add_products",
+            sql: "INSERT INTO products (name, description, expiration_date, stock_quantity, sale_price, category)
+            VALUES
+            ('Paracetamol 500mg', 'Analgésico e antipirético', '2026-05-10', 150, 5.50, 'Medicamentos'),
+            ('Ibuprofeno 400mg', 'Anti-inflamatório não esteroidal', '2026-03-15', 200, 8.90, 'Medicamentos'),
+            ('Dipirona Sódica 1g', 'Analgésico e antitérmico', '2026-07-01', 300, 4.20, 'Medicamentos'),
+            ('Álcool 70%', 'Antisséptico líquido', '2028-01-20', 500, 3.80, 'Higiene'),
+            ('Soro Fisiológico 500ml', 'Solução para limpeza e hidratação nasal', '2027-09-05', 100, 6.50, 'Higiene'),
+            ('Máscara Cirúrgica', 'Máscara descartável tripla camada', '2028-12-31', 1000, 0.80, 'Proteção'),
+            ('Luvas de Látex M', 'Luvas descartáveis para procedimentos', '2028-11-20', 600, 1.20, 'Proteção'),
+            ('Amoxicilina 500mg', 'Antibiótico para infecções bacterianas', '2026-04-30', 120, 12.50, 'Medicamentos'),
+            ('Omeprazol 20mg', 'Inibidor da bomba de prótons', '2026-09-10', 180, 9.75, 'Medicamentos'),
+            ('Vitamina C 500mg', 'Suplemento vitamínico', '2027-06-15', 250, 7.80, 'Suplementos'),
+            ('Shampoo Anticaspa', 'Controle de caspa e oleosidade', '2028-08-12', 90, 15.50, 'Higiene'),
+            ('Creme Hidratante 200ml', 'Hidratação intensiva para pele seca', '2029-02-25', 140, 18.20, 'Cosméticos'),
+            ('Protetor Solar FPS 50', 'Proteção solar para pele', '2028-11-30', 80, 35.90, 'Cosméticos'),
+            ('Escova Dental Macia', 'Escova dental com cerdas macias', '2029-05-18', 500, 4.50, 'Higiene'),
+            ('Fita Microporosa', 'Fita adesiva para curativos', '2029-07-10', 300, 2.10, 'Curativos'),
+            ('Curativo Adesivo', 'Curativo impermeável', '2029-08-01', 400, 1.50, 'Curativos'),
+            ('Solução de Iodo 10%', 'Antisséptico tópico', '2027-04-12', 60, 9.00, 'Higiene'),
+            ('Pomada Antibiótica', 'Pomada para tratamento de feridas', '2027-12-22', 85, 14.30, 'Medicamentos'),
+            ('Termômetro Digital', 'Termômetro clínico de alta precisão', '2030-01-15', 70, 25.00, 'Acessórios'),
+            ('Gaze Esterilizada', 'Pacote com 10 unidades', '2029-06-01', 350, 3.00, 'Curativos');
+            ",
+            kind: MigrationKind::Up,
+        },
+        Migration {
+            version: 2,
+            description: "create_initial_tables",
+            sql: "CREATE TABLE IF NOT EXISTS sales (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                total REAL NOT NULL,
+                payment_method TEXT NOT NULL,
+                created_at TEXT NOT NULL
+            );",
+            kind: MigrationKind::Up,
+        },
+        Migration {
+            version: 3,
+            description: "create_initial_tables",
+            sql: "CREATE TABLE IF NOT EXISTS sale_items (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                sale_id INTEGER NOT NULL,
+                product_id INTEGER NOT NULL,
+                quantity INTEGER NOT NULL,
+                price REAL NOT NULL,
+                created_at TEXT NOT NULL,
+                FOREIGN KEY (sale_id) REFERENCES sales(id),
+                FOREIGN KEY (product_id) REFERENCES products(id)
+            );",
+            kind: MigrationKind::Up,
+        },
+        Migration {
+            version: 4,
+            description: "add_deleted_column_to_products",
+            sql: "ALTER TABLE products ADD COLUMN deleted BOOLEAN DEFAULT 0;",
+            kind: MigrationKind::Up,
+        },
+        // Criação da tabela users
+        Migration {
+            version: 5,
+            description: "create_users_table",
+            sql: r#"
+                CREATE TABLE IF NOT EXISTS users (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    username TEXT NOT NULL UNIQUE,
+                    password TEXT NOT NULL,
+                    role TEXT NOT NULL
+                );
+            "#
+            .into(),
+            kind: MigrationKind::Up,
+        },
+        // Seed inicial
+        Migration {
+            version: 6,
+            description: "seed_users",
+            sql: r#"
+                INSERT INTO users (username, password, role)
+                VALUES
+                    ('admin', '123','admin'),
+                    ('Aldair', '123','farmaceutico'),
+                    ('Lucia', '123','farmaceutica'),
+                    ('Nelma', '123','farmaceutica'),
+                    ('Emiliana', '123','farmaceutica');
+            "#
+            .into(),
+            kind: MigrationKind::Up,
+        },
+    ]
+}

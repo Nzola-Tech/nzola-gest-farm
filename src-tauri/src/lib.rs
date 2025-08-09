@@ -1,58 +1,8 @@
-use tauri_plugin_sql::{Migration, MigrationKind};
+mod migrations;
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
-    let migrations = vec![
-        // Define your migrations here
-        Migration {
-            version: 1,
-            description: "create_initial_tables",
-            sql: "CREATE TABLE IF NOT EXISTS products (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                name TEXT NOT NULL,
-                description TEXT,
-                expiration_date DATE,
-                stock_quantity INTEGER DEFAULT 0,
-                sale_price REAL,
-                category TEXT,
-                created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-                updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
-            );",
-            kind: MigrationKind::Up,
-        },
-        Migration {
-            version: 2,
-            description: "create_initial_tables",
-            sql: "CREATE TABLE IF NOT EXISTS sales (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                total REAL NOT NULL,
-                payment_method TEXT NOT NULL,
-                created_at TEXT NOT NULL
-            );",
-            kind: MigrationKind::Up,
-        },
-        Migration {
-            version: 3,
-            description: "create_initial_tables",
-            sql: "CREATE TABLE IF NOT EXISTS sale_items (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                sale_id INTEGER NOT NULL,
-                product_id INTEGER NOT NULL,
-                quantity INTEGER NOT NULL,
-                price REAL NOT NULL,
-                created_at TEXT NOT NULL,
-                FOREIGN KEY (sale_id) REFERENCES sales(id),
-                FOREIGN KEY (product_id) REFERENCES products(id)
-            );",
-            kind: MigrationKind::Up,
-        },
-        Migration {
-            version: 4,
-            description: "add_deleted_column_to_products",
-            sql: "ALTER TABLE products ADD COLUMN deleted BOOLEAN DEFAULT 0;",
-            kind: MigrationKind::Up,
-        },
-    ];
+    let migrations = migrations::get_migrations();
 
     tauri::Builder::default()
         .plugin(

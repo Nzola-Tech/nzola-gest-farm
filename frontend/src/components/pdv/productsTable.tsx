@@ -13,11 +13,11 @@ import {
 import React, { useContext, useMemo, useState } from "react";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 
-import { DbContext } from "@/context/db";
 import { PdvContext } from "@/context/pdv";
+import { useDbStore } from "@/store/db-store";
 
 export default function ProductsTable() {
-  const { products } = useContext(DbContext);
+  const { products } = useDbStore();
 
   const [filterValue, setFilterValue] = useState("");
   const [rowsPerPage, setRowsPerPage] = useState(8);

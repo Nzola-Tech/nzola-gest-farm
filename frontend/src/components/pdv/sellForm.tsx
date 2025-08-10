@@ -11,11 +11,11 @@ import { useContext, useEffect, useState } from "react";
 import { Form } from "@heroui/form";
 import { NumberInput } from "@heroui/number-input";
 
-import { DbContext } from "@/context/db";
 import { paymentOptions } from "@/types/pdv";
 import { PdvContext } from "@/context/pdv";
 import { insertSale, insertSaleItemsAndUpdateStock } from "@/database";
 import { Product } from "./product";
+import { useDbStore } from "@/store/db-store";
 
 export const SellForm = ({ onEditQuantity }:{onEditQuantity: (productId: number, quantity: number) => void}) => {
   const {
@@ -24,7 +24,7 @@ export const SellForm = ({ onEditQuantity }:{onEditQuantity: (productId: number,
     setCart,
     setSelectedKeys,
   } = useContext(PdvContext);
-  const { db, refreshProducts } = useContext(DbContext);
+  const { db, refreshProducts } = useDbStore();
   const [totalPayment, setTotalPayment] = useState(0);
   const [paymentMode, setPaymentMode] = useState<Selection>(
     new Set([paymentOptions[0].value]),

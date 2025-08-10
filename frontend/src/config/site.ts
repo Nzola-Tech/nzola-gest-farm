@@ -7,43 +7,38 @@ export const siteConfig = {
     {
       label: "HOME",
       href: "/",
-      content: ["Dados da Empresa", "Minha Agenda", "Alterar Minha Senha"],
+      role: ["admin","farmaceutico", "funcionario"]
     },
     {
       label: "VENDAS",
       href: "/vendas",
-      content: ["QUIANNI Suporte (QS)", "Denuncie"],
+      role: ["admin","farmaceutico", "funcionario"],
     },
     {
       label: "PRODUTOS",
       href: "/produtos",
       content: ["Criar Produto"],
-      function: {
-        addProd: "addProduct",
-        rmProd: "rmProduct",
-        del: "delProduct",
-        edit: "editProduct",
-      },
+      role: ["admin"],
     },
     {
       label: "ESTOQUE",
       href: "/estoque",
-      content: ["Utilizadores", "Perfil de Utilizadores"],
+       role: ["admin"],
     },
     {
       label: "FINANÇAS",
       href: "/financas",
-      content: ["Gestão de Idiomas", "Ajuda", "Configurações"],
+       role: ["admin"]
     },
     {
       label: "CLIENTES",
       href: "/clientes",
-      content: ["Configuração Jabakule (SMS)"],
+       role: ["admin"]
     },
     {
       label: "BACKUP & SEGURANÇA",
       href: "/backup-seguranca",
-      content: ["Gestão de Idiomas", "Ajuda", "Configurações"],
+       role: ["admin"]
     },
   ],
   navMenuItems: [

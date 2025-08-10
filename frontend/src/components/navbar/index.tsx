@@ -1,40 +1,49 @@
 import { Tabs, Tab } from "@heroui/tabs";
 import { useLocation } from "react-router-dom";
-
 import { siteConfig } from "@/config/site";
 import { ThemeSwitch } from "../theme-switch";
-
-const tabs = siteConfig.navItems.map((item) => ({
-  label: item.label,
-  href: item.href,
-  content: item.content, // Use empty array if content is not defined
-}));
+import { UserIcon } from "../user";
+import { useAuthStore } from "@/store/auth-store"; 
+type NavItem = typeof siteConfig.navItems[number];
 
 export default function NavBar() {
   const { pathname } = useLocation();
+  const user = useAuthStore((state) => state.user);
+
+  let filteredTabs: NavItem[] = [];
+
+  if (user?.role === "admin") {
+    filteredTabs = siteConfig.navItems;
+  } else if (user?.role === "farmaceutica" || user?.role === "farmaceutico") {
+    filteredTabs = siteConfig.navItems.filter(
+      (item) => item.label === "HOME" || item.label === "VENDAS"
+    );
+  } else {
+    filteredTabs = []; 
+  }
 
   return (
     <div className="w-full">
-      <div className="px-2 mt-2 mb-5">
+      <div className="flex justify-between items-center px-2 mt-2 mb-5">
         <Tabs
           aria-label="Options"
           color="primary"
-          defaultSelectedKey={tabs[0].label}
+          defaultSelectedKey={filteredTabs[0]?.href}
           placement="top"
           selectedKey={pathname}
           size="sm"
         >
-          {tabs.map((tab, index) => (
+          {filteredTabs.map((tab) => (
             <Tab
-              key={`${siteConfig.navItems[index].href}`}
-              href={`${tabs[index].href}`}
+              key={tab.href}
+              href={tab.href}
               title={tab.label}
-            >  
-            </Tab>
+            />
           ))}
         </Tabs>
-        <div className="absolute top-4 right-10">
+        <div className="flex items-center gap-x-4">
           <ThemeSwitch />
+          <UserIcon />
         </div>
       </div>
     </div>

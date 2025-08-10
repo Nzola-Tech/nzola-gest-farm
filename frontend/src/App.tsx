@@ -11,22 +11,64 @@ import BeckupSeguranca from "./pages/backup-seguranca";
 import { ContextProvider } from "./components/contextProvider";
 
 import Home from "@/pages/index";
+import Login from "./pages/login";
+import { useEffect } from "react";
+import { useDbStore } from "./store/db-store";
+import { useAuthStore } from "./store/auth-store";
+import { ProtectedRoute } from "./components/protectRoute";
 
 function App() {
-  const navegate = useNavigate();
+  const navigate = useNavigate();
+  const { initDb } = useDbStore();
+  const { checkAuth } = useAuthStore();
+
+  useEffect(() => {
+    const init = async () => {
+      await initDb();
+      await checkAuth();
+    };
+    init();
+  }, [initDb])
 
   return (
     <ContextProvider>
-      <HeroUIProvider navigate={navegate} useHref={useHref}>
+      <HeroUIProvider navigate={navigate} useHref={useHref}>
         <ToastProvider />
         <Routes>
-          <Route element={<Home />} path="/" />
-          <Route element={<Produtos />} path="/produtos" />
-          <Route element={<Clientes />} path="/clientes" />
-          <Route element={<Estoque />} path="/estoque" />
-          <Route element={<VendasPdv />} path="/vendas" />
-          <Route element={<Financas />} path="/financas" />
-          <Route element={<BeckupSeguranca />} path="/backup-seguranca" />
+          <Route element={
+            <ProtectedRoute>
+              <Home />
+            </ProtectedRoute>
+          } path="/" />
+          <Route element={<Login />} path="/login" />
+          <Route element={
+            <ProtectedRoute allowedTypes={["admin"]}>
+              <Produtos />
+            </ProtectedRoute>
+          } path="/produtos" />
+          <Route element={
+            <ProtectedRoute allowedTypes={["admin"]}>
+              <Clientes />
+            </ProtectedRoute>
+          } path="/clientes" />
+          <Route element={
+            <ProtectedRoute allowedTypes={["admin"]}>
+              <Estoque />
+            </ProtectedRoute>
+          } path="/estoque" />
+          <Route element={
+            <ProtectedRoute allowedTypes={["admin","farmaceutica","farmaceutico"]}>
+              <VendasPdv />
+            </ProtectedRoute>
+          } path="/vendas" />
+          <Route element={
+            <ProtectedRoute allowedTypes={["admin"]}>
+              <Financas />
+            </ProtectedRoute>
+          } path="/financas" />
+          <Route element={
+            <BeckupSeguranca />
+          } path="/backup-seguranca" />
         </Routes>
       </HeroUIProvider>
     </ContextProvider>

@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.6.0](https://github.com/Nzola-Tech/nzola-gest-farm/compare/v0.5.0...v0.6.0) (2025-08-10)
+
+
+### Features
+
+* add auth ([658db46](https://github.com/Nzola-Tech/nzola-gest-farm/commit/658db46677089d38f62a481c304386a85601293c))
+* add better auth client ([dc94f0d](https://github.com/Nzola-Tech/nzola-gest-farm/commit/dc94f0d7978e185f2f7ca6e353510e57c71c381f))
+* add fake products to tables product and add table user ([bcf80b3](https://github.com/Nzola-Tech/nzola-gest-farm/commit/bcf80b33e33b27a91cd3c98a90363dd5104dfad0))
+* add right sale price ([0b3c014](https://github.com/Nzola-Tech/nzola-gest-farm/commit/0b3c0147157e8adc6aef0904261876937c5ce099))
+* add tauri-plugin-store ([5b305fb](https://github.com/Nzola-Tech/nzola-gest-farm/commit/5b305fbd60ab7a56f492f58683e8d7c12023efa3))
+* add zustand ([98da5e6](https://github.com/Nzola-Tech/nzola-gest-farm/commit/98da5e63c9e45282f1a80259f91b4e9987158827))
+
 ## [0.5.0](https://github.com/Nzola-Tech/nzola-gest-farm/compare/v0.4.4...v0.5.0) (2025-08-06)
 
 

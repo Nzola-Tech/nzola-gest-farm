@@ -17,9 +17,9 @@ import { Product } from "./product";
 import { useDbStore } from "@/store/db-store";
 import { usePdvStore } from "@/store/pdv-store";
 
-export const SellForm = ({ onEditQuantity }:{onEditQuantity: (productId: number, quantity: number) => void}) => {
+export const SellForm = ({ onEditQuantity }: { onEditQuantity: (productId: number, quantity: number) => void }) => {
   const { db, refreshProducts } = useDbStore();
-  const {cart, setCart, setSelectedKeys} = usePdvStore();
+  const { cart, setCart, setSelectedKeys } = usePdvStore();
   const [totalPayment, setTotalPayment] = useState(0);
   const [paymentMode, setPaymentMode] = useState<Selection>(
     new Set([paymentOptions[0].value]),
@@ -90,26 +90,30 @@ export const SellForm = ({ onEditQuantity }:{onEditQuantity: (productId: number,
           </div>
         </div>
 
-        <ScrollShadow className="row-span-6 p-4 space-y-4 h-full">
-          <div>
-            <div className="flex flex-row justify-between items-center mb-2">
-              <span>Nome</span>
-              <span>Qt</span>
-              <span>Preço</span>
-              <span>Desconto</span>
-              <span>Ações</span>
-            </div>
+        <ScrollShadow className="row-span-6 p-4 space-y-4 h-full text-center">
+          <div className="grid grid-cols-5 gap-2 mb-2">
+            <span className="font-semibold">Nome</span>
+            <span className="font-semibold">Qt</span>
+            <span className="font-semibold">Preço</span>
+            <span className="font-semibold">Desconto</span>
+            <span className="font-semibold">Ações</span>
+
             {cart.length === 0 ? (
-              <div className="h-full w-full flex justify-center items-center gap-4 ">
+              <div className="col-span-5 flex justify-center items-center gap-4 py-4">
                 <p>Sem itens adicionados ao carrinho.</p>
                 <ShoppingCartIcon className="size-6" />
               </div>
             ) : (
               cart.map((item) => (
-                <Product key={item.id} item={item} onEditQuantity={onEditQuantity} />
+                <Product
+                  key={item.id}
+                  item={item}
+                  onEditQuantity={onEditQuantity}
+                />
               ))
             )}
           </div>
+
         </ScrollShadow>
 
         <div className="flex flex-col items-end justify-end gap-2 bg-slate-100 p-4 dark:bg-zinc-800">

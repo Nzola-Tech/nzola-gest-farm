@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.6.1](https://github.com/Nzola-Tech/nzola-gest-farm/compare/v0.6.0...v0.6.1) (2025-08-11)
+
+
+### Bug Fixes
+
+* getting the last id inserted into the sales table, add the pdv store ([e840551](https://github.com/Nzola-Tech/nzola-gest-farm/commit/e84055137f55f49c75bf07982330888c4e8c2e83))
+* rm Dbcontext and add DbStore ([6a1f32d](https://github.com/Nzola-Tech/nzola-gest-farm/commit/6a1f32d383587e5d0de6b79dc3a9163f95a5c33a))
+
 ## [0.6.0](https://github.com/Nzola-Tech/nzola-gest-farm/compare/v0.5.0...v0.6.0) (2025-08-10)
 
 

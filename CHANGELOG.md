@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.6.2](https://github.com/Nzola-Tech/nzola-gest-farm/compare/v0.6.1...v0.6.2) (2025-08-11)
+
+
+### Bug Fixes
+
+* implementing pdvstore to pdv page ([d81effa](https://github.com/Nzola-Tech/nzola-gest-farm/commit/d81effa8543ec09bb1adce7315a80bf4382c6cfe))
+
 ## [0.6.1](https://github.com/Nzola-Tech/nzola-gest-farm/compare/v0.6.0...v0.6.1) (2025-08-11)
 
 

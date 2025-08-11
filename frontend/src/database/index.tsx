@@ -16,15 +16,16 @@ export async function insertSale(
   payment: string,
   createdAt: string,
 ) {
-  await db.execute(
+  const result = await db.execute(
     "INSERT INTO sales (total, payment_method, created_at) VALUES ($1, $2, $3)",
     [total, payment, createdAt],
   );
-  const [{ id: saleId }] = (await db.select(
-    "SELECT last_insert_rowid() as id",
-  )) as { id: number }[];
 
-  return saleId;
+  const { lastInsertId } = result
+  
+  if (!lastInsertId) return 0;
+
+  return lastInsertId;
 }
 
 export async function insertSaleItemsAndUpdateStock(

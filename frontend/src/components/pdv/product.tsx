@@ -1,17 +1,13 @@
-import { PdvContext } from "@/context/pdv";
 import { CartItem } from "@/types/pdv";
 import { Button } from "@heroui/button";
 import { Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from "@heroui/dropdown";
 import { EllipsisVerticalIcon } from "@heroicons/react/24/solid";
-import { useContext } from "react";
+import { usePdvStore } from "@/store/pdv-store";
 
 
 
 export const Product = ({ item,onEditQuantity }: { item: CartItem, onEditQuantity: (id: number, quantity: number) => void }) => {
-    const {
-        removeFromCart,
-        updateQuantity,
-    } = useContext(PdvContext);
+    const { removeFromCart, updateQuantity } = usePdvStore();
     return (
         <div key={item.id} className="flex justify-between mb-2 items-center">
             <div className="flex flex-col items-center">

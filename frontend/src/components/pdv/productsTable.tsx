@@ -10,11 +10,11 @@ import {
   TableRow,
   Selection,
 } from "@heroui/table";
-import React, { useContext, useMemo, useState } from "react";
+import React, { useMemo, useState } from "react";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 
-import { PdvContext } from "@/context/pdv";
 import { useDbStore } from "@/store/db-store";
+import { usePdvStore } from "@/store/pdv-store";
 
 export default function ProductsTable() {
   const { products } = useDbStore();
@@ -27,7 +27,7 @@ export default function ProductsTable() {
   });
   const [page, setPage] = useState(1);
   const { selectedKeys, setSelectedKeys, cart, addToCart, removeFromCart } =
-    useContext(PdvContext);
+    usePdvStore(); 
 
   const handleSelectionChange = (keys: Selection) => {
     // Remover do carrinho os produtos desselecionados

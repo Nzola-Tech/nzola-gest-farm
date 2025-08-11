@@ -7,24 +7,19 @@ import { ButtonGroup, Button } from "@heroui/button";
 import { ScrollShadow } from "@heroui/scroll-shadow";
 import { Select, SelectItem } from "@heroui/select";
 import { Selection } from "@heroui/table";
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Form } from "@heroui/form";
 import { NumberInput } from "@heroui/number-input";
 
 import { paymentOptions } from "@/types/pdv";
-import { PdvContext } from "@/context/pdv";
 import { insertSale, insertSaleItemsAndUpdateStock } from "@/database";
 import { Product } from "./product";
 import { useDbStore } from "@/store/db-store";
+import { usePdvStore } from "@/store/pdv-store";
 
 export const SellForm = ({ onEditQuantity }:{onEditQuantity: (productId: number, quantity: number) => void}) => {
-  const {
-    cart,
-    payment,
-    setCart,
-    setSelectedKeys,
-  } = useContext(PdvContext);
   const { db, refreshProducts } = useDbStore();
+  const {cart, setCart, setSelectedKeys} = usePdvStore();
   const [totalPayment, setTotalPayment] = useState(0);
   const [paymentMode, setPaymentMode] = useState<Selection>(
     new Set([paymentOptions[0].value]),
@@ -57,7 +52,9 @@ export const SellForm = ({ onEditQuantity }:{onEditQuantity: (productId: number,
       return;
     }
     const now = new Date().toISOString();
-    const saleId = await insertSale(db, total, payment, now);
+    const selectedPayment = Array.from(paymentMode)[0] || paymentOptions[0].value;
+
+    const saleId = await insertSale(db, total, selectedPayment.toString(), now);
 
     await insertSaleItemsAndUpdateStock(db, saleId, cart, now);
 

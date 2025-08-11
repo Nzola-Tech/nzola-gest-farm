@@ -12,7 +12,9 @@ export const Product = ({ item, onEditQuantity }: { item: CartItem, onEditQuanti
         <div  key={item.id} className="col-span-5 w-full flex justify-between items-center">
             
                 <div className="flex flex-col items-center">
-                    <span>{item.name}</span>
+                    <span>{
+                    item.name.length > 8 ? item.name.slice(0, 8) + "..." : item.name
+                    }</span>
                 </div>
                 <div className="flex flex-col items-center">
                     <span>{item.quantity}</span>

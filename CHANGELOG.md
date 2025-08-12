@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.6.3](https://github.com/Nzola-Tech/nzola-gest-farm/compare/v0.6.2...v0.6.3) (2025-08-12)
+
+
+### Bug Fixes
+
+* improving sellform ui. ([da0d315](https://github.com/Nzola-Tech/nzola-gest-farm/commit/da0d315015a6a76405503ca51386ca2d2c9d031d))
+* updade the ui, sellform ([7f92f4c](https://github.com/Nzola-Tech/nzola-gest-farm/commit/7f92f4c6f2a420aac47cd682f1b4017e98299906))
+* using payment in the pdv store ([2e5701d](https://github.com/Nzola-Tech/nzola-gest-farm/commit/2e5701d9131dcd370a1aba55054bb8bc4fcb4826))
+
 ## [0.6.2](https://github.com/Nzola-Tech/nzola-gest-farm/compare/v0.6.1...v0.6.2) (2025-08-11)
 
 

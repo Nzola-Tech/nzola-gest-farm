@@ -18,3 +18,8 @@ export const paymentOptions = [
   { key: "cartão", value: "Cartão" },
   { key: "crédito", value: "Crédito" },
 ];
+
+export interface SellFormProps {
+  onEditQuantity: (productId: number, quantity: number) => void;
+  confirmPrint?: () => void;
+}

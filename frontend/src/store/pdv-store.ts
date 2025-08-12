@@ -4,10 +4,10 @@ import { CartItem, paymentOptions } from "@/types/pdv";
 
 interface PdvState {
   cart: CartItem[];
-  payment: string;
+  payment: Selection;
   selectedKeys: Selection;
   addToCart: (product: CartItem) => void;
-  changePayment: (option: string) => void;
+  changePayment: (option: Selection) => void;
   removeFromCart: (id: number) => void;
   updateQuantity: (id: number, quantity: number) => void;
   setSelectedKeys: (keys: Selection) => void;
@@ -16,7 +16,7 @@ interface PdvState {
 
 export const usePdvStore = create<PdvState>((set) => ({
   cart: [],
-  payment: paymentOptions[0].value,
+  payment: new Set([paymentOptions[0].value]),
   selectedKeys: new Set([]),
 
   addToCart: (product) =>
@@ -63,5 +63,5 @@ export const usePdvStore = create<PdvState>((set) => ({
   setSelectedKeys: (keys) => set({ selectedKeys: keys }),
 
   setCart: (cart) => set({ cart }),
-  
+
 }));

@@ -6,24 +6,21 @@ import {
 import { ButtonGroup, Button } from "@heroui/button";
 import { ScrollShadow } from "@heroui/scroll-shadow";
 import { Select, SelectItem } from "@heroui/select";
-import { Selection } from "@heroui/table";
 import { useEffect, useState } from "react";
 import { Form } from "@heroui/form";
 import { NumberInput } from "@heroui/number-input";
 
-import { paymentOptions } from "@/types/pdv";
+import { paymentOptions, SellFormProps } from "@/types/pdv";
 import { insertSale, insertSaleItemsAndUpdateStock } from "@/database";
 import { Product } from "./product";
 import { useDbStore } from "@/store/db-store";
 import { usePdvStore } from "@/store/pdv-store";
+import { generatePDF } from "@/services/pdv/generatePdf";
 
-export const SellForm = ({ onEditQuantity }: { onEditQuantity: (productId: number, quantity: number) => void }) => {
+export const SellForm = ({ onEditQuantity, confirmPrint }: SellFormProps) => {
   const { db, refreshProducts } = useDbStore();
-  const { cart, setCart, setSelectedKeys } = usePdvStore();
+  const { cart, setCart, setSelectedKeys,payment, changePayment } = usePdvStore();
   const [totalPayment, setTotalPayment] = useState(0);
-  const [paymentMode, setPaymentMode] = useState<Selection>(
-    new Set([paymentOptions[0].value]),
-  );
   const [paymentError, setPaymentError] = useState(false);
   const total = cart.reduce(
     (sum, item) => sum + item.sale_price * item.quantity,
@@ -51,16 +48,22 @@ export const SellForm = ({ onEditQuantity }: { onEditQuantity: (productId: numbe
 
       return;
     }
+    const selectedPayment = [...payment][0].toString();
     const now = new Date().toISOString();
-    const selectedPayment = Array.from(paymentMode)[0] || paymentOptions[0].value;
+    const pdfUrl = generatePDF(cart, total, selectedPayment, "00001", { name: "Cliente Teste", nif: "123456789" });
 
-    const saleId = await insertSale(db, total, selectedPayment.toString(), now);
-
-    await insertSaleItemsAndUpdateStock(db, saleId, cart, now);
-
+    if (confirmPrint) {
+      window.open(pdfUrl, "_blank");
+      /*  const saleId = await insertSale(db, total, selectedPayment.toString(), now);
+  
+    await insertSaleItemsAndUpdateStock(db, saleId, cart, now); */
+    }
+    window.open(pdfUrl, "_blank");
+   
+  
     setCart([]);
     setSelectedKeys(new Set([]));
-    setPaymentMode(new Set([]));
+    changePayment(new Set([]));
     refreshProducts && refreshProducts();
   };
 
@@ -155,10 +158,10 @@ export const SellForm = ({ onEditQuantity }: { onEditQuantity: (productId: numbe
             label="Modo de pagamento"
             name="paymentMode"
             placeholder="Selecione um metodo"
-            selectedKeys={paymentMode}
+            selectedKeys={payment}
             size="md"
             variant="underlined"
-            onSelectionChange={setPaymentMode}
+            onSelectionChange={changePayment}
           >
             {paymentOptions.map((pay) => (
               <SelectItem key={pay.value}>{pay.key}</SelectItem>
@@ -180,7 +183,7 @@ export const SellForm = ({ onEditQuantity }: { onEditQuantity: (productId: numbe
               onPress={() => {
                 setCart([]);
                 setSelectedKeys(new Set([]));
-                setPaymentMode(new Set([]));
+                changePayment(new Set([]));
                 refreshProducts && refreshProducts();
               }}
             >

@@ -1,23 +1,22 @@
-import { 
-  Modal, 
-  ModalHeader, 
-  ModalBody, 
-  ModalFooter, 
-  ModalContent 
-} from '@heroui/modal';
-import { Input } from '@heroui/input';
-import { Button } from '@heroui/button';
-import { Form } from '@heroui/form';
-
-import { ShoppingCartIcon } from '@heroicons/react/24/outline';
-import { useState, useEffect } from 'react';
+import {
+  Modal,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  ModalContent,
+} from "@heroui/modal";
+import { Input } from "@heroui/input";
+import { Button } from "@heroui/button";
+import { Form } from "@heroui/form";
+import { ShoppingCartIcon } from "@heroicons/react/24/outline";
+import { useState, useEffect } from "react";
 
 export interface EditProductQuantityModalProps {
   productId: number;
   qt: number;
   isOpen: boolean;
   onOpenChange: (isOpen: boolean) => void;
-  onSubmit: (productId: number, quantity: number) => void; 
+  onSubmit: (productId: number, quantity: number) => void;
 }
 
 export const EditProductQuantityModal = ({
@@ -27,29 +26,27 @@ export const EditProductQuantityModal = ({
   qt,
   onSubmit,
 }: EditProductQuantityModalProps) => {
-
   const [quantity, setQuantity] = useState<number>(qt);
 
   useEffect(() => {
     if (isOpen) {
-      setQuantity(qt); 
+      setQuantity(qt);
     }
   }, [isOpen, qt]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
+
     setQuantity(value ? Number(value) : 0);
   };
 
   const handleSubmit = () => {
-    onSubmit(productId, quantity);  
+    onSubmit(productId, quantity);
     onOpenChange(false);
   };
 
   return (
-    <Form
-      onSubmit={handleSubmit}
-    >
+    <Form onSubmit={handleSubmit}>
       <Modal isOpen={isOpen} placement="top-center" onOpenChange={onOpenChange}>
         <ModalContent>
           {(onClose) => (
@@ -59,13 +56,17 @@ export const EditProductQuantityModal = ({
               </ModalHeader>
               <ModalBody>
                 <Input
-                  endContent={<ShoppingCartIcon className="size-6" />}
-                  type="number"
-                  placeholder="Quantidade"
-                  variant="faded"
                   required
+                  endContent={<ShoppingCartIcon className="size-6" />}
                   min={1}
-                  value={quantity !== undefined && quantity !== null ? String(quantity) : ''}
+                  placeholder="Quantidade"
+                  type="number"
+                  value={
+                    quantity !== undefined && quantity !== null
+                      ? String(quantity)
+                      : ""
+                  }
+                  variant="faded"
                   onChange={handleChange}
                 />
               </ModalBody>

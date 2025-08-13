@@ -21,8 +21,8 @@ export async function insertSale(
     [total, payment, createdAt],
   );
 
-  const { lastInsertId } = result
-  
+  const { lastInsertId } = result;
+
   if (!lastInsertId) return 0;
 
   return lastInsertId;

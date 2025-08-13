@@ -1,5 +1,6 @@
 // utils/printFaturaThermal.ts
 import { invoke } from "@tauri-apps/api/core";
+
 import { CartItem } from "@/types/pdv";
 
 interface ClienteInfo {
@@ -12,9 +13,10 @@ export async function printFaturaThermal(
   total: number,
   paymentMethod: string,
   invoiceNumber: string,
-  cliente: ClienteInfo
+  cliente: ClienteInfo,
 ) {
   const lines: string[] = [];
+
   lines.push("  Nzola Gest Farmácia");
   lines.push("  NIF: 1234567");
   lines.push("------------------------------");
@@ -25,6 +27,7 @@ export async function printFaturaThermal(
 
   cart.forEach((item) => {
     const subtotal = (item.sale_price * item.quantity).toFixed(2);
+
     lines.push(`${item.name} ${item.quantity}x ${item.sale_price.toFixed(2)}`);
     lines.push(`Total: ${subtotal}`);
   });

@@ -6,10 +6,11 @@ import {
 } from "@heroui/dropdown";
 import { User } from "@heroui/user";
 import { Link, useNavigate } from "react-router-dom";
+
 import { useAuthStore } from "@/store/auth-store";
 
 export const UserIcon = () => {
-  const { logout,user } = useAuthStore();
+  const { logout, user } = useAuthStore();
   const navigate = useNavigate();
 
   function handleLogout() {
@@ -25,11 +26,10 @@ export const UserIcon = () => {
     <Dropdown placement="bottom-start">
       <DropdownTrigger>
         <User
-
           as="button"
           avatarProps={{
             isBordered: true,
-            src: ""
+            src: "",
           }}
           className="transition-transform"
           description={`${user?.username || "Guest"}`}

@@ -27,7 +27,7 @@ export default function ProductsTable() {
   });
   const [page, setPage] = useState(1);
   const { selectedKeys, setSelectedKeys, cart, addToCart, removeFromCart } =
-    usePdvStore(); 
+    usePdvStore();
 
   const handleSelectionChange = (keys: Selection) => {
     // Remover do carrinho os produtos desselecionados

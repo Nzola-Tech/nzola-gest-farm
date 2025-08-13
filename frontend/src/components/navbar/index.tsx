@@ -1,10 +1,12 @@
 import { Tabs, Tab } from "@heroui/tabs";
 import { useLocation } from "react-router-dom";
-import { siteConfig } from "@/config/site";
+
 import { ThemeSwitch } from "../theme-switch";
 import { UserIcon } from "../user";
-import { useAuthStore } from "@/store/auth-store"; 
-type NavItem = typeof siteConfig.navItems[number];
+
+import { siteConfig } from "@/config/site";
+import { useAuthStore } from "@/store/auth-store";
+type NavItem = (typeof siteConfig.navItems)[number];
 
 export default function NavBar() {
   const { pathname } = useLocation();
@@ -16,10 +18,10 @@ export default function NavBar() {
     filteredTabs = siteConfig.navItems;
   } else if (user?.role === "farmaceutica" || user?.role === "farmaceutico") {
     filteredTabs = siteConfig.navItems.filter(
-      (item) => item.label === "HOME" || item.label === "VENDAS"
+      (item) => item.label === "HOME" || item.label === "VENDAS",
     );
   } else {
-    filteredTabs = []; 
+    filteredTabs = [];
   }
 
   return (
@@ -34,11 +36,7 @@ export default function NavBar() {
           size="sm"
         >
           {filteredTabs.map((tab) => (
-            <Tab
-              key={tab.href}
-              href={tab.href}
-              title={tab.label}
-            />
+            <Tab key={tab.href} href={tab.href} title={tab.label} />
           ))}
         </Tabs>
         <div className="flex items-center gap-x-4">

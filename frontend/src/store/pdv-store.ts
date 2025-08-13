@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import { Selection } from "@heroui/table";
+
 import { CartItem, paymentOptions } from "@/types/pdv";
 
 interface PdvState {
@@ -28,7 +29,7 @@ export const usePdvStore = create<PdvState>((set) => ({
           cart: state.cart.map((item) =>
             item.id === product.id
               ? { ...item, quantity: item.quantity + 1 }
-              : item
+              : item,
           ),
         };
       }
@@ -41,6 +42,7 @@ export const usePdvStore = create<PdvState>((set) => ({
   removeFromCart: (id) =>
     set((state) => {
       const newKeys = new Set(state.selectedKeys);
+
       newKeys.delete(String(id));
 
       return {
@@ -52,9 +54,7 @@ export const usePdvStore = create<PdvState>((set) => ({
   updateQuantity: (id, quantity) =>
     set((state) => ({
       cart: state.cart.map((item) =>
-        item.id === id
-          ? { ...item, quantity: Math.max(1, quantity) }
-          : item
+        item.id === id ? { ...item, quantity: Math.max(1, quantity) } : item,
       ),
     })),
 
@@ -63,5 +63,4 @@ export const usePdvStore = create<PdvState>((set) => ({
   setSelectedKeys: (keys) => set({ selectedKeys: keys }),
 
   setCart: (cart) => set({ cart }),
-
 }));

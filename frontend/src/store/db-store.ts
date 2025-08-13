@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import Database from "@tauri-apps/plugin-sql";
+
 import { fetchProducts } from "@/database";
 import { Product } from "@/types/products";
 
@@ -15,6 +16,7 @@ const getDbInstance = async () => {
   if (!dbInstance) {
     dbInstance = await Database.load("sqlite:ngf.db");
   }
+
   return dbInstance;
 };
 
@@ -31,9 +33,11 @@ export const useDbStore = create<DbState>((set, get) => ({
 
   refreshProducts: async () => {
     const { db } = get();
+
     if (!db) return;
 
     const allProducts = await fetchProducts(db);
+
     set({ products: allProducts });
   },
 }));

@@ -1,5 +1,6 @@
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
+
 import { CartItem } from "@/types/pdv";
 
 interface ClienteInfo {
@@ -12,7 +13,7 @@ export function generatePDF(
   total: number,
   paymentMethod: string,
   invoiceNumber: string,
-  cliente: ClienteInfo
+  cliente: ClienteInfo,
 ): string {
   const doc = new jsPDF();
 
@@ -32,7 +33,9 @@ export function generatePDF(
       item.name,
       item.quantity.toString(),
       item.sale_price.toLocaleString("pt-BR", { minimumFractionDigits: 2 }),
-      (item.sale_price * item.quantity).toLocaleString("pt-BR", { minimumFractionDigits: 2 }),
+      (item.sale_price * item.quantity).toLocaleString("pt-BR", {
+        minimumFractionDigits: 2,
+      }),
     ]),
     styles: { fontSize: 9 },
   });
@@ -40,7 +43,11 @@ export function generatePDF(
   const finalY = (doc as any).lastAutoTable.finalY || 56;
 
   doc.setFontSize(12);
-  doc.text(`Total: ${total.toLocaleString("pt-BR", { minimumFractionDigits: 2 })} KZ`, 14, finalY + 10);
+  doc.text(
+    `Total: ${total.toLocaleString("pt-BR", { minimumFractionDigits: 2 })} KZ`,
+    14,
+    finalY + 10,
+  );
   doc.setFontSize(9);
   doc.text("Obrigado pela preferência!", 14, finalY + 18);
 

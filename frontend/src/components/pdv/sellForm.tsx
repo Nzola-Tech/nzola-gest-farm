@@ -10,16 +10,17 @@ import { useEffect, useState } from "react";
 import { Form } from "@heroui/form";
 import { NumberInput } from "@heroui/number-input";
 
-import { paymentOptions, SellFormProps } from "@/types/pdv";
-import { insertSale, insertSaleItemsAndUpdateStock } from "@/database";
 import { Product } from "./product";
+
+import { paymentOptions, SellFormProps } from "@/types/pdv";
 import { useDbStore } from "@/store/db-store";
 import { usePdvStore } from "@/store/pdv-store";
 import { generatePDF } from "@/services/pdv/generatePdf";
 
 export const SellForm = ({ onEditQuantity, confirmPrint }: SellFormProps) => {
   const { db, refreshProducts } = useDbStore();
-  const { cart, setCart, setSelectedKeys,payment, changePayment } = usePdvStore();
+  const { cart, setCart, setSelectedKeys, payment, changePayment } =
+    usePdvStore();
   const [totalPayment, setTotalPayment] = useState(0);
   const [paymentError, setPaymentError] = useState(false);
   const total = cart.reduce(
@@ -29,9 +30,9 @@ export const SellForm = ({ onEditQuantity, confirmPrint }: SellFormProps) => {
   const troco =
     totalPayment >= total
       ? Math.max(0, totalPayment - total).toLocaleString("pt-BR", {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2,
-      })
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2,
+        })
       : "0,00";
 
   useEffect(() => {
@@ -49,8 +50,11 @@ export const SellForm = ({ onEditQuantity, confirmPrint }: SellFormProps) => {
       return;
     }
     const selectedPayment = [...payment][0].toString();
-    const now = new Date().toISOString();
-    const pdfUrl = generatePDF(cart, total, selectedPayment, "00001", { name: "Cliente Teste", nif: "123456789" });
+    //const now = new Date().toISOString();
+    const pdfUrl = generatePDF(cart, total, selectedPayment, "00001", {
+      name: "Cliente Teste",
+      nif: "123456789",
+    });
 
     if (confirmPrint) {
       window.open(pdfUrl, "_blank");
@@ -59,8 +63,7 @@ export const SellForm = ({ onEditQuantity, confirmPrint }: SellFormProps) => {
     await insertSaleItemsAndUpdateStock(db, saleId, cart, now); */
     }
     window.open(pdfUrl, "_blank");
-   
-  
+
     setCart([]);
     setSelectedKeys(new Set([]));
     changePayment(new Set([]));
@@ -116,7 +119,6 @@ export const SellForm = ({ onEditQuantity, confirmPrint }: SellFormProps) => {
               ))
             )}
           </div>
-
         </ScrollShadow>
 
         <div className="flex flex-col items-end justify-end gap-2 bg-slate-100 p-4 dark:bg-zinc-800">

@@ -7,12 +7,12 @@ export const siteConfig = {
     {
       label: "HOME",
       href: "/",
-      role: ["admin","farmaceutico", "funcionario"]
+      role: ["admin", "farmaceutico", "funcionario"],
     },
     {
       label: "VENDAS",
       href: "/vendas",
-      role: ["admin","farmaceutico", "funcionario"],
+      role: ["admin", "farmaceutico", "funcionario"],
     },
     {
       label: "PRODUTOS",
@@ -23,22 +23,22 @@ export const siteConfig = {
     {
       label: "ESTOQUE",
       href: "/estoque",
-       role: ["admin"],
+      role: ["admin"],
     },
     {
       label: "FINANÇAS",
       href: "/financas",
-       role: ["admin"]
+      role: ["admin"],
     },
     {
       label: "CLIENTES",
       href: "/clientes",
-       role: ["admin"]
+      role: ["admin"],
     },
     {
       label: "BACKUP & SEGURANÇA",
       href: "/backup-seguranca",
-       role: ["admin"]
+      role: ["admin"],
     },
   ],
   navMenuItems: [

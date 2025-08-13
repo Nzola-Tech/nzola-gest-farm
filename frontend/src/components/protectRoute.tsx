@@ -11,7 +11,7 @@ export const ProtectedRoute = ({
   children,
   allowedTypes,
 }: ProtectedRouteProps) => {
-  const {user} = useAuthStore();
+  const { user } = useAuthStore();
 
   if (!user) return <Navigate replace to="/login" />;
 

@@ -1,13 +1,16 @@
+import { useDisclosure } from "@heroui/modal";
+import { useState } from "react";
+
 import { EditProductQuantityModal } from "@/components/pdv/editProductQuantityModal";
 import ProductsTable from "@/components/pdv/productsTable";
 import { SellForm } from "@/components/pdv/sellForm";
 import DefaultLayout from "@/layouts/default";
 import { usePdvStore } from "@/store/pdv-store";
-import { useDisclosure } from "@heroui/modal";
-import { useState } from "react";
 
 export default function Pdv() {
-  const [selectedProductId, setSelectedProductId] = useState<number | null>(null);
+  const [selectedProductId, setSelectedProductId] = useState<number | null>(
+    null,
+  );
   const [quantityProduct, setQuantityProduct] = useState<number | null>(null);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { updateQuantity } = usePdvStore();
@@ -29,13 +32,12 @@ export default function Pdv() {
         </div>
 
         <EditProductQuantityModal
-          productId={selectedProductId ?? 0}
           isOpen={isOpen}
+          productId={selectedProductId ?? 0}
+          qt={quantityProduct ?? 1}
           onOpenChange={onClose}
           onSubmit={updateQuantity}
-          qt={quantityProduct ?? 1}
         />
-
       </DefaultLayout>
     </>
   );

@@ -140,7 +140,6 @@ const AllProducts: React.FC<allProductsProps & { filterValue: string }> = ({
           items={items}
         >
           {items.map((product) => {
-
             return (
               <TableRow key={product.id}>
                 <TableCell>{product.id}</TableCell>

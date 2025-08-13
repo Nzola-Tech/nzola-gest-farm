@@ -6,7 +6,7 @@ import { useEffect } from "react";
 import Produtos from "./pages/produtos";
 import Clientes from "./pages/clientes";
 import Estoque from "./pages/estoque";
-import VendasPdv from "./pages/vendas-pdv";
+import VendasPdv from "./pages/pdv";
 import Financas from "./pages/financas";
 import BeckupSeguranca from "./pages/backup-seguranca";
 import { ContextProvider } from "./components/contextProvider";

@@ -16,6 +16,8 @@ import { useAuthStore } from "./store/auth-store";
 import { ProtectedRoute } from "./components/protectRoute";
 
 import Home from "@/pages/index";
+import Signup from "./pages/signup";
+import UserManagement from "./pages/users";
 
 function App() {
   const navigate = useNavigate();
@@ -45,6 +47,7 @@ function App() {
             path="/"
           />
           <Route element={<Login />} path="/login" />
+          <Route element={<Signup />} path="/signup" />
           <Route
             element={
               <ProtectedRoute allowedTypes={["admin"]}>
@@ -52,6 +55,14 @@ function App() {
               </ProtectedRoute>
             }
             path="/produtos"
+          />
+          <Route
+            element={
+              <ProtectedRoute allowedTypes={["admin"]}>
+                <UserManagement />
+              </ProtectedRoute>
+            }
+            path="/admin/usermanagement"
           />
           <Route
             element={
@@ -72,7 +83,7 @@ function App() {
           <Route
             element={
               <ProtectedRoute
-                allowedTypes={["admin", "farmaceutica", "farmaceutico"]}
+                allowedTypes={["admin", "user"]}
               >
                 <VendasPdv />
               </ProtectedRoute>

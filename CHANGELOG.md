@@ -1,5 +1,25 @@
 # Changelog
 
+## [0.7.0](https://github.com/Nzola-Tech/nzola-gest-farm/compare/v0.6.3...v0.7.0) (2025-08-17)
+
+
+### Features
+
+* add docs ([1fffde8](https://github.com/Nzola-Tech/nzola-gest-farm/commit/1fffde8f4f12d8cc8ad22d4ae96c23cb260ca90d))
+* compare password with bcrypt ([1fffde8](https://github.com/Nzola-Tech/nzola-gest-farm/commit/1fffde8f4f12d8cc8ad22d4ae96c23cb260ca90d))
+* create and delete users ([1fffde8](https://github.com/Nzola-Tech/nzola-gest-farm/commit/1fffde8f4f12d8cc8ad22d4ae96c23cb260ca90d))
+* Creating company ([1fffde8](https://github.com/Nzola-Tech/nzola-gest-farm/commit/1fffde8f4f12d8cc8ad22d4ae96c23cb260ca90d))
+* crud for signup done ([1fffde8](https://github.com/Nzola-Tech/nzola-gest-farm/commit/1fffde8f4f12d8cc8ad22d4ae96c23cb260ca90d))
+
+
+### Bug Fixes
+
+* add existingCompany insertCompany ([1fffde8](https://github.com/Nzola-Tech/nzola-gest-farm/commit/1fffde8f4f12d8cc8ad22d4ae96c23cb260ca90d))
+* lint files, rm images ([f536d0b](https://github.com/Nzola-Tech/nzola-gest-farm/commit/f536d0b14fc09f8902700f903f87487c2538e75d))
+* removing vendas.pdv component and add pdv component ([ecdfa49](https://github.com/Nzola-Tech/nzola-gest-farm/commit/ecdfa4929605b55f2eeaf888f76cbbb65e771a56))
+* removing vendas.pdv component and add pdv component ([e30b236](https://github.com/Nzola-Tech/nzola-gest-farm/commit/e30b236de1944870591f426c8afa1fdddafc202b))
+* validate password before send ([1fffde8](https://github.com/Nzola-Tech/nzola-gest-farm/commit/1fffde8f4f12d8cc8ad22d4ae96c23cb260ca90d))
+
 ## [0.6.3](https://github.com/Nzola-Tech/nzola-gest-farm/compare/v0.6.2...v0.6.3) (2025-08-12)
 
 

@@ -8,19 +8,33 @@ import { User } from "@heroui/user";
 import { Link, useNavigate } from "react-router-dom";
 
 import { useAuthStore } from "@/store/auth-store";
+import { useDbStore } from "@/store/db-store";
+import { useEffect, useState } from "react";
+import { existingCompany } from "@/database";
 
 export const UserIcon = () => {
+  const { db } = useDbStore();
   const { logout, user } = useAuthStore();
+  const [existCompany, setExistCompany] = useState<boolean>(false);
   const navigate = useNavigate();
-
   function handleLogout() {
     logout();
     navigate("/");
   }
 
+
   function handleLogin() {
     navigate("/login");
   }
+
+  useEffect(() => {
+    const checkCompany = async () => {
+      const exists = await existingCompany(db);
+      if (exists) return setExistCompany(true);
+      setExistCompany(false);
+    };
+    checkCompany();
+  }, [db]);
 
   return (
     <Dropdown placement="bottom-start">
@@ -42,18 +56,22 @@ export const UserIcon = () => {
           <p className="font-bold">{`@${user?.username || "Guest"}`}</p>
         </DropdownItem>
         {user ? (
-          <DropdownItem key="home">
-            <Link to="/"> Home</Link>
+          <DropdownItem key="vendas">
+            <Link to="/vendas">Vendas</Link>
           </DropdownItem>
         ) : (
           <></>
         )}
-        <DropdownItem key="rps" className="h-14 gap-2">
-          <Link to="/onboarding">Pedra Papel Tesoura</Link>
-        </DropdownItem>
+        {user?.role === "admin" && !existCompany ? (
+          <DropdownItem key="singup">
+            <Link to="/signup">Cadastrar Empresa</Link>
+          </DropdownItem>
+        ) : (
+          <></>
+        )}
         {user?.role === "admin" ? (
-          <DropdownItem key="dasboard">
-            <Link to="/dashboard">Dashboard</Link>
+          <DropdownItem key="managerUsers">
+            <Link to="/admin/usermanagement">Gerenciar Usuarios</Link>
           </DropdownItem>
         ) : (
           <></>

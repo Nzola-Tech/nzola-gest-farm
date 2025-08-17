@@ -6,6 +6,7 @@ import { UserIcon } from "../user";
 
 import { siteConfig } from "@/config/site";
 import { useAuthStore } from "@/store/auth-store";
+import { userRoles } from "@/types/signup";
 type NavItem = (typeof siteConfig.navItems)[number];
 
 export default function NavBar() {
@@ -16,7 +17,7 @@ export default function NavBar() {
 
   if (user?.role === "admin") {
     filteredTabs = siteConfig.navItems;
-  } else if (user?.role === "farmaceutica" || user?.role === "farmaceutico") {
+  } else if (user?.role === userRoles[1]) {
     filteredTabs = siteConfig.navItems.filter(
       (item) => item.label === "HOME" || item.label === "VENDAS",
     );

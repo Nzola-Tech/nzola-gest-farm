@@ -20,6 +20,7 @@
   "dependencies": {
     "@heroicons/react": "^2.2.0",
     "@heroui/button": "2.2.19",
+    "@heroui/card": "^2.2.23",
     "@heroui/chip": "^2.2.16",
     "@heroui/code": "2.2.14",
     "@heroui/dropdown": "2.3.19",
@@ -46,8 +47,9 @@
     "@react-types/shared": "3.29.0",
     "@tauri-apps/api": "^2.5.0",
     "@tauri-apps/plugin-sql": "~2",
-    "better-auth": "^1.3.4",
     "@tauri-apps/plugin-store": "^2.3.0",
+    "bcryptjs": "^3.0.2",
+    "better-auth": "^1.3.4",
     "clsx": "2.1.1",
     "framer-motion": "11.15.0",
     "jspdf": "^3.0.1",

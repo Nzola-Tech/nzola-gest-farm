@@ -1,17 +1,12 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import { Store } from "@tauri-apps/plugin-store";
-
 import { useDbStore } from "./db-store";
-
-export interface User {
-  username: string;
-  password?: string;
-  role?: "admin" | "farmaceutico" | "farmaceutica";
-}
+import { User } from "@/types/signup/index"
+import bcrypt from "bcryptjs";
 
 interface AuthState {
-  user: User | null;
+  user: Pick<User, "id" | "username" | "role" | "status"> | null;
   loading: boolean;
   login: (userData: User) => Promise<void | boolean>;
   logout: () => Promise<void>;
@@ -35,24 +30,50 @@ export const useAuthStore = create<AuthState>()(
 
       login: async (userData) => {
         const db = useDbStore.getState().db;
-
         if (!db) throw new Error("Banco de dados não inicializado");
 
+        // Busca apenas o hash da senha para o username fornecido
+        const pwdb = await db.select<User[]>(
+          "SELECT password FROM users WHERE username = ?",
+          [userData.username]
+        );
+
+        if (pwdb.length === 0) {
+          throw new Error("Usuário não encontrado");
+        }
+
+        const hashArmazenado = pwdb[0].password;
+
+        // Compara senha digitada com hash do banco
+        const match = await bcrypt.compare(userData.password, hashArmazenado);
+        if (!match) {
+          throw new Error("Usuário ou senha inválidos");
+        }
+
+        // Agora busca todos os dados do usuário
         const user = await db.select<User[]>(
-          "SELECT * FROM users WHERE username = ? AND password = ?",
-          [userData.username, userData.password],
+          "SELECT * FROM users WHERE username = ?",
+          [userData.username]
         );
 
         if (user.length === 1) {
           const store = await getStore();
 
           await store.set("user", {
+            id: user[0].id,
             username: user[0].username,
             role: user[0].role,
+            status: "active",
           });
           await store.save();
+
           set({
-            user: { username: user[0].username, role: user[0].role },
+            user: {
+              id: user[0].id,
+              username: user[0].username,
+              role: user[0].role,
+              status: "active",
+            },
             loading: false,
           });
 

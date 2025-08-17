@@ -87,7 +87,10 @@ pub fn get_migrations() -> Vec<Migration> {
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
                     username TEXT NOT NULL UNIQUE,
                     password TEXT NOT NULL,
-                    role TEXT NOT NULL
+                    role TEXT NOT NULL DEFAULT 'user',
+                    status TEXT NOT NULL DEFAULT 'inactive',
+                    created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                    updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
                 );
             "#
             .into(),
@@ -100,14 +103,27 @@ pub fn get_migrations() -> Vec<Migration> {
             sql: r#"
                 INSERT INTO users (username, password, role)
                 VALUES
-                    ('admin', '123','admin'),
-                    ('Aldair', '123','farmaceutico'),
-                    ('Lucia', '123','farmaceutica'),
-                    ('Nelma', '123','farmaceutica'),
-                    ('Emiliana', '123','farmaceutica');
+                    ('admin', 'admin123','admin'),
+                    ('adminReset', 'adminReset123','farmaceutico');
             "#
             .into(),
             kind: MigrationKind::Up,
         },
+        Migration {
+            version: 8,
+            description: "seed_company",
+            sql: r#"
+                CREATE TABLE IF NOT EXISTS company (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    name TEXT NOT NULL,
+                    nif TEXT,
+                    location TEXT,
+                    phone TEXT,
+                    email TEXT
+                );
+            "#
+            .into(),
+            kind: MigrationKind::Up,
+        }
     ]
 }

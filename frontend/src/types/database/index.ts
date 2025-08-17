@@ -7,3 +7,13 @@ export type DbContextType = {
   products: Product[];
   refreshProducts: () => Promise<void>;
 };
+
+
+export type Company = {
+  id?: number;
+  name: string;
+  nif: string;
+  email: string;
+  phone: string;
+  location: string;
+}

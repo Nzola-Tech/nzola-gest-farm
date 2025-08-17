@@ -3,6 +3,7 @@ import Database from "@tauri-apps/plugin-sql";
 import { Product } from "../types/products";
 
 import { CartItem } from "@/types/pdv";
+import { Company } from "@/types/database";
 
 export async function fetchProducts(db: Database | null): Promise<Product[]> {
   const result = await db?.select("SELECT * FROM products");
@@ -96,3 +97,19 @@ export const handleSubmit = async (
   setSelectedKeys(new Set([]));
   refreshProducts && refreshProducts();
 };
+
+export const existingCompany = async (db: Database | null) => {
+  if (!db) return false;
+  const company = await db?.select<Company[]>("SELECT * FROM company");
+  if (company.length > 0) return true;
+  return false; 
+}
+
+export const insertCompany = async (db: Database | null, company: Company) => {
+  if (!db) return [];
+  const result = await db.execute(
+    "INSERT INTO company (name, nif, email, phone, location) VALUES ($1, $2, $3, $4, $5)",
+    [company.name, company.nif, company.email, company.phone, company.location],
+  );
+  return result;
+}

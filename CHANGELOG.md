@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.8.0](https://github.com/Nzola-Tech/nzola-gest-farm/compare/v0.7.0...v0.8.0) (2025-09-01)
+
+
+### Features
+
+* add skeleton ([a2943fe](https://github.com/Nzola-Tech/nzola-gest-farm/commit/a2943fe510aab8f4ba3a1a69a8a38d53c43c5865))
+
 ## [0.7.0](https://github.com/Nzola-Tech/nzola-gest-farm/compare/v0.6.3...v0.7.0) (2025-08-17)
 
 

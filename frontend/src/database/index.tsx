@@ -47,6 +47,37 @@ export async function insertSaleItemsAndUpdateStock(
   }
 }
 
+export async function productsSoldToday(db: Database | null) {
+  const today = new Date().toISOString().split("T")[0]; // yyyy-mm-dd
+
+  const result = await db?.select<{ soldToday: number }[]>(
+    `SELECT COALESCE(SUM(si.quantity), 0) as soldToday
+     FROM sale_items si
+     JOIN sales s ON s.id = si.sale_id
+     WHERE DATE(si.created_at) = ?`,
+    [today]
+  );
+
+  if (!result || result.length === 0) return 0;
+
+  return result[0].soldToday;
+}
+
+export async function totalSalesToday(db: Database | null) {
+  const today = new Date().toISOString().split("T")[0];
+
+  const result = await db?.select<{ totalToday: number }[]>(
+    `SELECT COALESCE(SUM(total), 0) as totalToday
+     FROM sales
+     WHERE DATE(created_at) = ?`,
+    [today]
+  );
+  
+  if (!result || result.length === 0) return 0;
+
+  return result[0].totalToday;
+}
+
 export const handleDelete = async (
   id: number,
   db: Database | null,
@@ -102,7 +133,7 @@ export const existingCompany = async (db: Database | null) => {
   if (!db) return false;
   const company = await db?.select<Company[]>("SELECT * FROM company");
   if (company.length > 0) return true;
-  return false; 
+  return false;
 }
 
 export const insertCompany = async (db: Database | null, company: Company) => {

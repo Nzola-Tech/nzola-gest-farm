@@ -23,3 +23,20 @@ export interface SellFormProps {
   onEditQuantity: (productId: number, quantity: number) => void;
   confirmPrint?: () => void;
 }
+
+export type Sale = {
+  id: number;
+  total: number;
+  payment_method: string;
+  created_at: string;
+};
+
+export interface SaleItem {
+  id: number;
+  sale_id: number;
+  product_id: number;
+  product_name: string; // vindo do JOIN com products
+  quantity: number;
+  price: number;
+  created_at: string;
+}

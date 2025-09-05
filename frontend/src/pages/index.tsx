@@ -8,9 +8,10 @@ import { CalendarDaysIcon } from "@heroicons/react/24/outline";
 import { productsSoldToday, totalSalesToday as TotalSaleToday } from "@/database";
 import { useDbStore } from "@/store/db-store";
 import { useEffect, useState } from "react";
-import { invoicesOfTheDay,invoiceItems } from "@/services/pdv/invoice";
+import { invoicesOfTheDay, invoiceItems } from "@/services/pdv/invoice";
 import { Sale, SaleItem } from "@/types/pdv";
 import InvoiceModal from "@/components/home/invoiceModal";
+import DailyTopProductsChart from "@/components/charts/DailyTopProductsChart";
 
 export default function Home() {
 
@@ -78,23 +79,11 @@ export default function Home() {
                     </h1>
                   </ListboxItem>
                 )}
-                {/* <ListboxItem textValue="text">
-                  <div className="flex justify-between items-center">
-                    <span>Nº FR {new Date().getFullYear()}/1</span>
-                    <EyeIcon className="size-6 " />
-                  </div>
-                </ListboxItem>
-                <ListboxItem textValue="text">
-                  <div className="flex justify-between items-center">
-                    <span>Nº FR {new Date().getFullYear()}/1</span>
-                    <EyeIcon className="size-6 " />
-                  </div>
-                </ListboxItem> */}
               </Listbox>
             </ScrollShadow>
           </div>
           <div className="overflow-auto col-start-4 col-span-10 shadow-xl rounded-t-lg dark:bg-default-100">
-
+            <DailyTopProductsChart />
           </div>
         </Layout>
         {selectedInvoice && (

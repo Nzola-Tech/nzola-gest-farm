@@ -54,10 +54,10 @@ export default function Sidebar() {
       label: "Vendas",
       icon: <ShoppingBagIcon className="size-6" />,
       children: [
-        { label: "Fatura", href: "#" },
-        { label: "Fatura Recibo", href: "/vendas" },
-        { label: "Performance", href: "#" },
-        { label: "Orçamento", href: "#" },
+        { id: "invoice", label: "Fatura", href: "#" },
+        { id: "receipt", label: "Fatura Recibo", href: "/pdv" },
+        { id: "performance", label: "Performance", href: "#" },
+        { id: "budget", label: "Orçamento", href: "#" },
       ],
     },
     {
@@ -65,22 +65,21 @@ export default function Sidebar() {
       label: "Adicionar",
       icon: <PlusIcon className="size-6" />,
       children: [
-        { label: "Produto", href: "/produtos" },
-        { label: "Serviço", href: "#" },
+        { id: "product", label: "Produto", href: "/produtos" },
+        { id: "service", label: "Serviço", href: "#" },
         {
           id: "entities",
           label: "Entidades",
           children: [
-            { label: "Cliente", href: "#" },
-            { label: "Fornecedor", href: "#" },
+            { id: "customer", label: "Cliente", href: "#" },
+            { id: "supplier", label: "Fornecedor", href: "#" },
           ],
         },
       ],
     },
-
   ];
 
-  if (user?.role === "admin") {
+  if (user?.role?.toLocaleLowerCase() === "admin") {
     menuItems.push(
       {
         id: "finance",
@@ -93,15 +92,15 @@ export default function Sidebar() {
         label: "Configurações",
         icon: <Cog6ToothIcon className="size-6" />,
         href: "/settings",
-
       }
     );
   }
 
   return (
     <aside
-      className={`h-dvh bg-slate-100 text-white flex flex-col justify-between transition-all duration-300 ${collapsed ? "w-20" : "w-56"
-        } dark:bg-default-100`}
+      className={`h-dvh bg-slate-100 text-white flex flex-col justify-between transition-all duration-300 ${
+        collapsed ? "w-20" : "w-56"
+      } dark:bg-default-100`}
     >
       <div>
         <div className="flex items-center justify-between px-3 py-4">
@@ -168,8 +167,9 @@ export default function Sidebar() {
                             >
                               {child.label}
                               <ChevronDownIcon
-                                className={`size-4 transition ${isSubOpen ? "rotate-180" : ""
-                                  }`}
+                                className={`size-4 transition ${
+                                  isSubOpen ? "rotate-180" : ""
+                                }`}
                               />
                             </Button>
 
@@ -177,7 +177,7 @@ export default function Sidebar() {
                               <div className="ml-4 mt-1 flex flex-col gap-1">
                                 {child.children.map((sub: any) => (
                                   <Button
-                                    key={sub.href}
+                                    key={sub.id} 
                                     size="sm"
                                     variant="light"
                                     className="justify-start"
@@ -194,7 +194,7 @@ export default function Sidebar() {
 
                       return (
                         <Button
-                          key={child.href}
+                          key={child.id} 
                           size="sm"
                           variant="light"
                           className="justify-start"

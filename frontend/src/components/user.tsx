@@ -54,21 +54,21 @@ export const UserIcon = () => {
         />
       </DropdownTrigger>
       <DropdownMenu aria-label="User Actions" variant="light">
-        {user?.role === "admin" && !existCompany ? (
+        {user?.role === "ADMIN" && !existCompany ? (
           <DropdownItem key="singup" textValue="cadastrar empresa">
             <Link to="/signup">Cadastrar Empresa</Link>
           </DropdownItem>
         ) : (
           <></>
         )}
-        {user?.role === "admin" ? (
+        {user?.role === "ADMIN" ? (
           <DropdownItem key="managerUsers" textValue="gerenciar usuarios">
             <Link to="/admin/usermanagement">Gerenciar Usuarios</Link>
           </DropdownItem>
         ) : (
           <></>
         )}
-        {user?.role === "admin" ? (
+        {user?.role === "ADMIN" ? (
           <DropdownItem key="managerUsers" textValue="Empresa">
             <Link to="/company">Empresa</Link>
           </DropdownItem>

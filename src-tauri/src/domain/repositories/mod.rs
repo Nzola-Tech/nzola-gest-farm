@@ -1,2 +1,3 @@
 pub mod product_repository;
 pub mod sale_repository;
+pub mod user_repository;

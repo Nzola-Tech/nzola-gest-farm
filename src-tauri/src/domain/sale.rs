@@ -2,6 +2,18 @@
 use crate::domain::{DomainError, SaleItem};
 use bigdecimal::BigDecimal;
 
+use crate::application::dto::create_sale_dto::PaymentMethod;
+
+impl std::fmt::Debug for PaymentMethod {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            PaymentMethod::Cash => write!(f, "Cash"),
+            PaymentMethod::CreditCard => write!(f, "CreditCard"),
+            PaymentMethod::DebitCard => write!(f, "DebitCard"),
+        }
+    }
+}
+
 #[derive(Debug)]
 pub struct Sale {
     pub id: Option<u64>,
@@ -9,7 +21,7 @@ pub struct Sale {
     pub subtotal: BigDecimal,
     pub discount_total: BigDecimal,
     pub total: BigDecimal,
-    pub payment_method: String,
+    pub payment_method: PaymentMethod,
 }
 
 impl Sale {
@@ -24,7 +36,12 @@ impl Sale {
             subtotal: BigDecimal::from(0),
             discount_total: BigDecimal::from(0),
             total: BigDecimal::from(0),
-            payment_method,
+            payment_method: match payment_method.as_str() {
+                "Cash" => PaymentMethod::Cash,
+                "CreditCard" => PaymentMethod::CreditCard,
+                "DebitCard" => PaymentMethod::DebitCard,
+                _ => return Err(DomainError::Invalid("Método de pagamento inválido")),
+            },
         })
     }
 

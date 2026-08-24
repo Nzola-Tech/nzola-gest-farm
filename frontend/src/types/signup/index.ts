@@ -1,13 +1,13 @@
-export type UserRole = "admin" | "user" | "manager";
+export type UserRole = "ADMIN" | "USER" | "MANAGER";
 
 export type UserStatus = "active" | "inactive" | "blocked";
 
 export interface User {
   id?: number;
-  username: string;
-  name: string;
-  surname: string;
-  email: string;
+  username?: string;
+  name?: string;
+  surname?: string;
+  email?: string;
   password: string;
   role?: UserRole;
   status?: UserStatus;
@@ -15,4 +15,4 @@ export interface User {
   updated_at?: Date;
 }
 
-export const userRoles: UserRole[] = ["admin", "user", "manager"];
+export const userRoles: UserRole[] = ["ADMIN", "USER", "MANAGER"];

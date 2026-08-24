@@ -1,6 +1,6 @@
 use crate::domain::repositories::user_repository::UserRepository;
 use crate::domain::user::{SignUpInput, LoginInput, AuthResponse, User, UserRole};
-use sqlx::{MySql, MySqlPool, Row};
+use sqlx::{MySqlPool, Row};
 use bcrypt::{hash, verify, DEFAULT_COST};
 
 pub struct MySqlUserRepository {

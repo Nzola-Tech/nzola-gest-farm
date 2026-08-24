@@ -1,7 +1,5 @@
 // src/infrastructure/mysql_sale_repository.rs
-use crate::domain::repositories::sale_repository::SaleRepository;
-use crate::domain::{Sale, SaleItem};
-use sqlx::{MySql, MySqlPool, Transaction};
+use sqlx::MySqlPool;
 
 pub struct MySqlSaleRepository {
     pool: MySqlPool,

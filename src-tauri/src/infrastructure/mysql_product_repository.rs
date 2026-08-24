@@ -2,7 +2,7 @@
 
 use crate::domain::product::Product;
 use crate::domain::repositories::product_repository::ProductRepository;
-use sqlx::MySqlPool;
+use sqlx::{MySqlPool, Row};
 
 pub struct MySqlProductRepository {
     pool: MySqlPool,
@@ -38,7 +38,7 @@ impl ProductRepository for MySqlProductRepository {
     }
 
     async fn find_all(&self) -> Result<Vec<Product>, String> {
-        let rows = sqlx::query!(
+        let rows = sqlx::query(
             r#"
             SELECT id, name, stock_quantity, sale_price
             FROM products
@@ -52,14 +52,14 @@ impl ProductRepository for MySqlProductRepository {
             .into_iter()
             .map(|row| {
                 let mut product = Product::create(
-                    row.name,
-                    row.sale_price.unwrap_or_default(),
-                    row.stock_quantity.unwrap_or_default(),
+                    row.get::<String, _>("name"),
+                    row.get::<sqlx::types::BigDecimal, _>("sale_price"),
+                    row.get::<i32, _>("stock_quantity"),
                     crate::domain::product::ProductType::Produto,
                 )
                 .unwrap();
 
-                product.set_id(row.id as u64);
+                product.set_id(row.get::<u64, _>("id"));
                 product
             })
             .collect();
@@ -68,28 +68,28 @@ impl ProductRepository for MySqlProductRepository {
     }
 
     async fn find_by_id(&self, id: u64) -> Result<Option<Product>, String> {
-        let row = sqlx::query!(
+        let row = sqlx::query(
             r#"
             SELECT id, name, stock_quantity, sale_price
             FROM products
             WHERE id = ?
             "#,
-            id
         )
+        .bind(id)
         .fetch_optional(&self.pool)
         .await
         .map_err(|e| e.to_string())?;
 
         if let Some(row) = row {
             let mut product = Product::create(
-                row.name,
-                row.sale_price.unwrap_or_default(),
-                row.stock_quantity.unwrap_or_default(),
+                row.get::<String, _>("name"),
+                row.get::<sqlx::types::BigDecimal, _>("sale_price"),
+                row.get::<i32, _>("stock_quantity"),
                 crate::domain::product::ProductType::Produto,
             )
             .unwrap();
 
-            product.set_id(row.id as u64);
+            product.set_id(row.get::<u64, _>("id"));
             Ok(Some(product))
         } else {
             Ok(None)

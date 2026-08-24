@@ -6,7 +6,7 @@ import { useEffect } from "react";
 import Produtos from "./pages/produtos";
 import Clientes from "./pages/clientes";
 import Estoque from "./pages/estoque";
-import VendasPdv from "./pages/pdv";
+import Pdv from "./pages/pdv";
 import Financas from "./pages/financas";
 import Settings from "./pages/settings";
 import { ContextProvider } from "./components/contextProvider";
@@ -21,6 +21,7 @@ import Home from "@/pages/index";
 import Company from "./pages/company";
 import { useCompanyInfoStore } from "./store/companyInfo-store";
 import ComingSoonPage from "./pages/building";
+import Unauthorized from "./pages/unauthorized";
 
 function App() {
   const navigate = useNavigate();
@@ -55,7 +56,7 @@ function App() {
           <Route element={<Signup />} path="/signup" />
           <Route
             element={
-              <ProtectedRoute allowedTypes={["admin"]}>
+              <ProtectedRoute allowedTypes={["ADMIN"]}>
                 <Produtos />
               </ProtectedRoute>
             }
@@ -63,7 +64,7 @@ function App() {
           />
           <Route
             element={
-              <ProtectedRoute allowedTypes={["admin"]}>
+              <ProtectedRoute allowedTypes={["ADMIN"]}>
                 <UserManagement />
               </ProtectedRoute>
             }
@@ -71,7 +72,7 @@ function App() {
           />
           <Route
             element={
-              <ProtectedRoute allowedTypes={["admin"]}>
+              <ProtectedRoute allowedTypes={["ADMIN"]}>
                 <Clientes />
               </ProtectedRoute>
             }
@@ -79,7 +80,7 @@ function App() {
           />
           <Route
             element={
-              <ProtectedRoute allowedTypes={["admin"]}>
+              <ProtectedRoute allowedTypes={["ADMIN"]}>
                 <Estoque />
               </ProtectedRoute>
             }
@@ -87,15 +88,15 @@ function App() {
           />
           <Route
             element={
-              <ProtectedRoute allowedTypes={["admin", "user"]}>
-                <VendasPdv />
+              <ProtectedRoute allowedTypes={["ADMIN", "USER"]}>
+                <Pdv />
               </ProtectedRoute>
             }
-            path="/vendas"
+            path="/pdv"
           />
           <Route
             element={
-              <ProtectedRoute allowedTypes={["admin"]}>
+              <ProtectedRoute allowedTypes={["ADMIN"]}>
                 <Financas />
               </ProtectedRoute>
             }
@@ -104,13 +105,14 @@ function App() {
           <Route element={<Settings />} path="/settings" />
           <Route
             element={
-              <ProtectedRoute allowedTypes={["admin"]}>
+              <ProtectedRoute allowedTypes={["ADMIN"]}>
                 <Company />
               </ProtectedRoute>
             }
             path="/company"
           />
           <Route element={<ComingSoonPage />} path="/building" />
+          <Route element={<Unauthorized />} path="/unauthorized" />
         </Routes>
       </HeroUIProvider>
     </ContextProvider>

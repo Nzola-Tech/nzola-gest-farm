@@ -7,24 +7,24 @@ pub struct MySqlSaleRepository {
     pool: MySqlPool,
 }
 
-#[async_trait::async_trait]
+/* #[async_trait::async_trait]
 impl SaleRepository for MySqlSaleRepository {
     async fn create(&self, sale: &mut Sale, items: Vec<SaleItem>) -> Result<(), String> {
         let mut tx: Transaction<MySql> = self.pool.begin().await.map_err(|e| e.to_string())?;
 
         // 1️⃣ Inserir Sale
-        let result = sqlx::query!(
+        let result = sqlx::query(
             r#"
             INSERT INTO sales
             (user_id, subtotal, discount_total, total, payment_method)
             VALUES (?, ?, ?, ?, ?)
-            "#,
-            sale.user_id,
-            sale.subtotal,
-            sale.discount_total,
-            sale.total,
-            sale.payment_method
+            "#
         )
+        .bind(&sale.user_id)
+        .bind(&sale.subtotal)
+        .bind(&sale.discount_total)
+        .bind(&sale.total)
+        .bind(&sale.payment_method)
         .execute(&mut *tx)
         .await
         .map_err(|e| e.to_string())?;
@@ -35,7 +35,7 @@ impl SaleRepository for MySqlSaleRepository {
         // 2️⃣ Inserir itens + atualizar stock
         for item in items {
             // Inserir item
-            sqlx::query!(
+            sqlx::query(
                 r#"
                 INSERT INTO sale_items
                 (
@@ -46,31 +46,31 @@ impl SaleRepository for MySqlSaleRepository {
                 )
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
                 "#,
-                sale_id,
-                item.product_id,
-                item.quantity,
-                item.unit_price,
-                item.discount_type,
-                item.discount_value,
-                item.discount_amount,
-                item.subtotal,
-                item.total
             )
+            .bind(sale_id)
+            .bind(item.product_id)
+            .bind(item.quantity)
+            .bind(item.unit_price)
+            .bind(item.discount_type)
+            .bind(item.discount_value)
+            .bind(item.discount_amount)
+            .bind(item.subtotal)
+            .bind(item.total)
             .execute(&mut *tx)
             .await
             .map_err(|e| e.to_string())?;
 
             // 🔥 Atualizar stock
-            let affected = sqlx::query!(
+            let affected = sqlx::query(
                 r#"
                 UPDATE products
                 SET stock_quantity = stock_quantity - ?
                 WHERE id = ? AND stock_quantity >= ?
-                "#,
-                item.quantity,
-                item.product_id,
-                item.quantity
+                "#
             )
+            .bind(item.quantity)
+            .bind(item.product_id)
+            .bind(item.quantity)
             .execute(&mut *tx)
             .await
             .map_err(|e| e.to_string())?
@@ -102,28 +102,30 @@ impl SaleRepository for MySqlSaleRepository {
 
         // Restore stock for each item
         for (product_id, quantity) in items {
-            sqlx::query!(
+            sqlx::query(
                 r#"
                 UPDATE products
                 SET stock_quantity = stock_quantity + ?
                 WHERE id = ?
                 "#,
-                quantity,
-                product_id
             )
+            .bind(quantity)
+            .bind(product_id)
             .execute(&mut *tx)
             .await
             .map_err(|e| e.to_string())?;
         }
 
         // Delete sale items
-        sqlx::query!("DELETE FROM sale_items WHERE sale_id = ?", sale_id)
+        sqlx::query("DELETE FROM sale_items WHERE sale_id = ?")
+            .bind(sale_id)
             .execute(&mut *tx)
             .await
             .map_err(|e| e.to_string())?;
 
         // Delete sale
-        sqlx::query!("DELETE FROM sales WHERE id = ?", sale_id)
+        sqlx::query("DELETE FROM sales WHERE id = ?")
+            .bind(sale_id)
             .execute(&mut *tx)
             .await
             .map_err(|e| e.to_string())?;
@@ -133,3 +135,4 @@ impl SaleRepository for MySqlSaleRepository {
         Ok(())
     }
 }
+ */

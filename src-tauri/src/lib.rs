@@ -3,31 +3,34 @@
 mod app_state;
 mod application;
 mod commands;
+mod config; // Novo módulo adicionado
 mod db;
 mod domain;
 mod infrastructure;
 mod migrations;
 
 use app_state::AppState;
+use config::AppConfig;
 use db::mysql;
-use std::env;
 use tauri::Manager;
 
+// Auth services
+use crate::application::auth_service::AuthService;
+use crate::infrastructure::mysql_user_repository::MySqlUserRepository;
+
+// Product services
 use crate::application::product_service::ProductService;
 use crate::infrastructure::mysql_product_repository::MySqlProductRepository;
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
-    dotenvy::dotenv().ok();
-    
-    #[allow(non_snake_case)]
-    let database_url = env::var("DATABASE_URL").expect("DATABASE_URL não definida");
+    let config = AppConfig::load();
 
     tauri::Builder::default()
         .plugin(tauri_plugin_fs::init())
         .plugin(tauri_plugin_dialog::init())
         .plugin(tauri_plugin_store::Builder::default().build())
-        .setup(|app| {
+        .setup(move |app| {
             if cfg!(debug_assertions) {
                 app.handle().plugin(
                     tauri_plugin_log::Builder::default()
@@ -37,19 +40,29 @@ pub fn run() {
             }
 
             let handle = app.handle().clone();
+            let db_url = config.database_url.clone();
 
             tauri::async_runtime::block_on(async move {
+                // Tenta conectar sem crashar com panic
+                let pool = match mysql::connect(&db_url).await {
+                    Ok(pool) => pool,
+                    Err(err) => {
+                        log::error!("Falha ao conectar no MySQL ({}): {:?}", db_url, err);
+                        return Err(Box::new(err) as Box<dyn std::error::Error>);
+                    }
+                };
 
-                let pool = mysql::connect(&database_url)
-                    .await
-                    .expect("Falha ao conectar no MySQL");
+                let user_repository = MySqlUserRepository::new(pool.clone());
+                let auth_service = AuthService::new(std::sync::Arc::new(user_repository));
+                let product_repository = MySqlProductRepository::new(pool.clone());
+                let product_service = ProductService::new(product_repository);
 
-                let repository = MySqlProductRepository::new(pool.clone());
-                let service = ProductService::new(repository);
-
-                handle.manage(service);
+                handle.manage(auth_service);
+                handle.manage(product_service);
                 handle.manage(AppState { db: pool });
-            });
+
+                Ok(())
+            })?;
 
             Ok(())
         })
@@ -59,7 +72,9 @@ pub fn run() {
             commands::product::list_products,
             commands::product::get_product,
             commands::product::delete_product,
-            commands::product::update_product
+            commands::product::update_product,
+            commands::auth::login,
+            commands::auth::signup,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

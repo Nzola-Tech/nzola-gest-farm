@@ -1,6 +1,6 @@
 {
-  "name": "nzola-gest-farmacia",
-  "description": "A modern pharmacy management system built with Tauri and React.",
+  "name": "nzola-gest",
+  "description": "A modern management system built with Tauri and React.",
   "author": "Nzola Tech",
   "license": "MIT",
   "repository": {

@@ -1,4 +1,4 @@
-// File src-tauri/src/application/sale_service.rs
+/* // File src-tauri/src/application/sale_service.rs
 use crate::application::dto::create_sale_dto::CreateSaleDTO;
 use crate::domain::repositories::sale_repository::SaleRepository;
 
@@ -14,14 +14,14 @@ impl<R: SaleRepository> SaleService<R> {
 
     pub async fn create_sale(&self, dto: CreateSaleDTO) -> Result<(), String> {
         // Aqui você pode adicionar validações e lógica de negócio antes de criar a venda
-        let mut sale = crate::domain::Sale::create(dto.customer_id)
+        let mut sale = crate::domain::Sale::new(dto.payment_method)
             .map_err(|e| format!("{:?}", e))?;
 
         let items = dto.items.into_iter().map(|item| {
-            crate::domain::SaleItem::create(item.product_id, item.quantity, item.price)
+            crate::domain::SaleItem::new(item.product_id, item.quantity, item.price)
                 .map_err(|e| format!("{:?}", e))
         }).collect::<Result<Vec<_>, _>>()?;
 
         self.repository.create(&mut sale, items).await
     }
-}
+} */

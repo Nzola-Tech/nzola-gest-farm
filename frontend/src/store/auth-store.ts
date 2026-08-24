@@ -1,11 +1,10 @@
 import { create } from "zustand";
-import { persist } from "zustand/middleware";
+import { persist, devtools } from "zustand/middleware"; // 1. Importado devtools aqui
 import { Store } from "@tauri-apps/plugin-store";
-import bcrypt from "bcryptjs";
-
-import { useDbStore } from "./db-store";
+import { invoke } from "@tauri-apps/api/core";
 
 import { User } from "@/types/signup/index";
+import { AuthResponse } from "@/types/login/inde";
 
 interface AuthState {
   user: Pick<User, "id" | "username" | "role" | "status" | "name" | "surname" | "email"> | null;
@@ -25,92 +24,77 @@ const getStore = async () => {
 };
 
 export const useAuthStore = create<AuthState>()(
-  persist(
-    (set) => ({
-      user: null,
-      loading: true,
+  devtools( // 2. Devtools envelopando o persist por fora
+    persist(
+      (set) => ({
+        user: null,
+        loading: true,
 
-      login: async (userData) => {
-        const db = useDbStore.getState().db;
+        login: async (credentials) => {
+          try {
+            const authenticatedUser = await invoke<AuthResponse>("login", {
+              input: {
+                username: credentials.username,
+                password: credentials.password,
+              },
+            });
 
-        if (!db) throw new Error("Banco de dados não inicializado");
+            if (!authenticatedUser) {
+              throw new Error("Usuário ou senha inválidos");
+            }
 
-        // Busca apenas o hash da senha para o username fornecido
-        const pwdb = await db.select<User[]>(
-          "SELECT password FROM users WHERE username = ?",
-          [userData.username],
-        );
+            const userData = {
+              id: authenticatedUser.user.id,
+              username: authenticatedUser.user.username,
+              name: authenticatedUser.user.name,
+              surname: authenticatedUser.user.surname,
+              role: authenticatedUser.user.role,
+              status: authenticatedUser.user.status || "active",
+              email: authenticatedUser.user.email,
+            };
 
-        if (pwdb.length === 0) {
-          throw new Error("Usuário não encontrado");
-        }
+            const store = await getStore();
+            await store.set("user", userData);
+            await store.save();
 
-        const hashArmazenado = pwdb[0].password;
+            // 3. Adicionado o nome da ação 'auth/login'
+            set({
+              user: userData,
+              loading: false,
+            }, false, 'auth/login');
 
-        // Compara senha digitada com hash do banco
-        const match = await bcrypt.compare(userData.password, hashArmazenado);
+            return true;
+          } catch (error) {
+            console.error("Erro no login:", error);
+            throw error;
+          }
+        },
 
-        if (!match) {
-          console.log("Senha incorreta");
-          throw new Error("Usuário ou senha inválidos");
-        }
-
-        // Agora busca todos os dados do usuário
-        const user = await db.select<User[]>(
-          "SELECT * FROM users WHERE username = ?",
-          [userData.username],
-        );
-
-        if (user.length === 1) {
+        logout: async () => {
           const store = await getStore();
 
-          await store.set("user", {
-            id: user[0].id,
-            username: user[0].username,
-            name: user[0].name,
-            surname: user[0].surname,
-            role: user[0].role,
-            status: "active",
-            email: user[0].email,
-          });
+          await store.delete("user");
           await store.save();
+          
+          // 4. Adicionado o nome da ação 'auth/logout'
+          set({ user: null, loading: false }, false, 'auth/logout');
+        },
 
-          set({
-            user: {
-              id: user[0].id,
-              username: user[0].username,
-              name: user[0].name,
-              surname: user[0].surname,
-              role: user[0].role,
-              status: "active",
-              email: user[0].email,
-            },
-            loading: false,
-          });
+        checkAuth: async () => {
+          const store = await getStore();
+          const savedUser = await store.get<User>("user");
 
-          return true;
-        } else {
-          throw new Error("Usuário ou senha inválidos");
-        }
+          // 5. Adicionado o nome da ação 'auth/checkAuth'
+          set({ user: savedUser || null, loading: false }, false, 'auth/checkAuth');
+        },
+      }),
+      {
+        name: "auth-storage",
       },
-
-      logout: async () => {
-        const store = await getStore();
-
-        await store.delete("user");
-        await store.save();
-        set({ user: null, loading: false });
-      },
-
-      checkAuth: async () => {
-        const store = await getStore();
-        const savedUser = await store.get<User>("user");
-
-        set({ user: savedUser || null, loading: false });
-      },
-    }),
+    ),
     {
-      name: "auth-storage",
-    },
+      name: "AuthStore", // 6. Nome customizado que aparecerá no menu do Redux DevTools
+      //enabled: process.env.NODE_ENV !== 'production', // Desativa automaticamente em produção
+    }
   ),
 );

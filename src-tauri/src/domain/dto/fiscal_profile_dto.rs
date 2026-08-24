@@ -1,6 +1,7 @@
 // domain/dto/fiscal_profile_dto.rs
 use chrono::NaiveDateTime;
 
+#[allow(dead_code)]
 #[derive(Debug, Clone)]
 pub struct FiscalProfileDTO {
     pub id: u64,

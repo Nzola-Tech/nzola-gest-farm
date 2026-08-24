@@ -1,6 +1,7 @@
 // domain/dto/sale_dto.rs
 use chrono::NaiveDateTime;
 
+#[allow(dead_code)]
 #[derive(Debug, Clone)]
 pub struct SaleDTO {
     pub id: u64,

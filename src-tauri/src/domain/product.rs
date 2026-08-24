@@ -4,11 +4,14 @@ use chrono::NaiveDate;
 
 #[derive(Debug, Clone, PartialEq)]
 #[derive(serde::Serialize)]
+
+#[allow(dead_code)]
 pub enum ProductType {
     Produto,
     Servico,
 }
 
+#[allow(dead_code)]
 #[derive(Debug, Clone)]
 pub struct Product {
     id: Option<u64>,
@@ -52,6 +55,7 @@ impl Product {
         })
     }
 
+    #[allow(dead_code)]
     pub fn increase_stock(&mut self, quantity: i32) -> Result<(), DomainError> {
         if quantity <= 0 {
             return Err(DomainError::Invalid("Quantidade inválida"));
@@ -61,6 +65,7 @@ impl Product {
         Ok(())
     }
 
+    #[allow(dead_code)]
     pub fn decrease_stock(&mut self, quantity: i32) -> Result<(), DomainError> {
         if quantity <= 0 {
             return Err(DomainError::Invalid("Quantidade inválida"));

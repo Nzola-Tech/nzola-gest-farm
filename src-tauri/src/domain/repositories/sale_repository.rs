@@ -1,6 +1,7 @@
 // src-tauri/src/domain/repositories/sale_repository.rs
 use crate::domain::{Sale, SaleItem};
 
+#[allow(dead_code)]
 #[async_trait::async_trait]
 pub trait SaleRepository: Send + Sync {
     async fn create(

@@ -1,4 +1,5 @@
 // domain/dto/company_partner_dto.rs
+#[allow(dead_code)]
 #[derive(Debug, Clone)]
 pub struct CompanyPartnerDTO {
     pub id: u64,

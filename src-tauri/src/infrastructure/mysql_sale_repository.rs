@@ -1,6 +1,7 @@
 // src/infrastructure/mysql_sale_repository.rs
 use sqlx::MySqlPool;
 
+#[allow(dead_code)]
 pub struct MySqlSaleRepository {
     pool: MySqlPool,
 }

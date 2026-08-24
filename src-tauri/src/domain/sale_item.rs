@@ -2,6 +2,7 @@
 use crate::domain::DomainError;
 use bigdecimal::BigDecimal;
 
+#[allow(dead_code)]
 #[derive(Debug, Clone)]
 pub struct SaleItem {
     pub product_id: u64,
@@ -15,6 +16,7 @@ pub struct SaleItem {
 }
 
 impl SaleItem {
+    #[allow(dead_code)]
     pub fn new(
         product_id: u64,
         quantity: i32,

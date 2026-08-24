@@ -14,6 +14,7 @@ impl std::fmt::Debug for PaymentMethod {
     }
 }
 
+#[allow(dead_code)]
 #[derive(Debug)]
 pub struct Sale {
     pub id: Option<u64>,
@@ -25,6 +26,7 @@ pub struct Sale {
 }
 
 impl Sale {
+    #[allow(dead_code)]
     pub fn new(payment_method: String) -> Result<Self, DomainError> {
         if payment_method.trim().is_empty() {
             return Err(DomainError::Invalid("Método de pagamento é obrigatório"));
@@ -45,6 +47,7 @@ impl Sale {
         })
     }
 
+    #[allow(dead_code)]
     pub fn add_item(&mut self, item: SaleItem) {
         self.subtotal += item.subtotal;
         self.discount_total += item.discount_amount;

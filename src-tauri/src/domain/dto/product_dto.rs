@@ -1,6 +1,7 @@
 // domain/dto/product_dto.rs
 use chrono::{NaiveDate, NaiveDateTime};
 
+#[allow(dead_code)]
 #[derive(Debug, Clone)]
 pub struct ProductDTO {
     pub id: u64,

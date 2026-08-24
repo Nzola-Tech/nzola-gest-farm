@@ -1,4 +1,6 @@
 // domain/fiscal_profile.rs
+
+#[allow(dead_code)]
 #[derive(Debug, Clone)]
 pub struct FiscalProfile {
     pub fiscal_regime: String,

@@ -42,6 +42,7 @@ pub struct AuthResponse {
 }
 
 impl User {
+    #[allow(dead_code)]
     pub fn new(id: u64, username: String, name: String, surname: String, role: UserRole, is_active: bool, email: Option<String>) -> Self {
         User {
             id,

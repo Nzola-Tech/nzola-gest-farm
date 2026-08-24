@@ -7,7 +7,6 @@ mod config; // Novo módulo adicionado
 mod db;
 mod domain;
 mod infrastructure;
-mod migrations;
 
 use app_state::AppState;
 use config::AppConfig;
